@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SupportDesk - Interactive Prototype</title>
+    <!-- Tailwind CSS with custom plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Custom Tailwind Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-primary-container": "#dad7ff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed": "#d8e3fb",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-tint": "#4d44e3",
+                        "primary-fixed": "#e2dfff",
+                        "surface-variant": "#e1e3e4",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#545f73",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "outline-variant": "#c7c4d8",
+                        "primary-container": "#4f46e5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "primary": "#3525cd",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "tertiary": "#7e3000",
+                        "surface-container-high": "#e7e8e9",
+                        "surface": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-container": "#586377",
+                        "secondary-container": "#d5e0f8",
+                        "on-surface-variant": "#464555",
+                        "tertiary-container": "#a44100",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "on-error-container": "#93000a",
+                        "outline": "#777587",
+                        "on-background": "#191c1d",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-tertiary-fixed": "#351000",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3323cc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "32px",
+                        "margin": "24px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "display": ["Inter"],
+                        "body-base": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-base": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+        
+        /* Smooth page transition animations */
+        .fade-in { animation: fadeIn 0.25s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <nav class="sticky top-0 z-50 flex justify-between items-center px-lg w-full bg-white dark:bg-surface-container-highest h-[56px] border-b border-outline-variant dark:border-outline shadow-sm">
+        <div class="flex items-center gap-xl">
+            <span onclick="navigateTo('dashboard')" class="text-title-lg font-display font-bold text-primary dark:text-primary-fixed-dim cursor-pointer select-none">SupportDesk</span>
+            <div class="hidden md:flex items-center gap-md">
+                <button onclick="navigateTo('dashboard')" id="nav-dashboard-btn" class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1 px-sm transition-all">Dashboard</button>
+                <button onclick="alert('Customers screen is a layout placeholder in MVP')" class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors duration-150 px-sm py-1 rounded">Customers</button>
+                <button onclick="alert('Reports screen is a layout placeholder in MVP')" class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors duration-150 px-sm py-1 rounded">Reports</button>
+            </div>
+        </div>
+        <div class="flex items-center gap-md">
+            <div class="hidden sm:flex items-center gap-sm">
+                <button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
+                    <span class="material-symbols-outlined">help_outline</span>
+                </button>
+            </div>
+            <button onclick="navigateTo('new-ticket')" class="bg-primary-container text-on-primary font-label-md text-label-md px-md py-sm rounded hover:opacity-95 transition-all active:scale-95 flex items-center gap-xs shadow-sm">
+                <span class="material-symbols-outlined !text-[18px]">add</span>
+                New Ticket
+            </button>
+            <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+                <img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlrSBr9K441pwz5cBLVYEAMBhpzY7GGqp-aLUuV4IdTL9yl2sQqcoE_iWkz_oBdVTbefdIftnBjvv5OWhm0GjhVPA6v8jTTKP8K4mm4co7edP_fTVrbcJ8q85YhphWwFPdXg92skOAjEL2u7Rqib_N7LqnGQnn0aaUZMAzhvNB23fD7te4Y2C9prXpTGqqI-ccXCe4Cbr85LcVYkF_gX3Y7taOCOnWByFdu9NykHTeg1F9WGEjyPGmg4MRtjJvcxq9eGha9QzduMAo"/>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SECTION: TICKET DASHBOARD -->
+    <main id="view-dashboard" class="fade-in flex-grow w-full max-w-7xl mx-auto px-lg py-xl">
+        <!-- Page Header -->
+        <header class="mb-lg flex justify-between items-end">
+            <div>
+                <h1 class="font-headline-md text-headline-md text-on-surface tracking-tight">Support Tickets</h1>
+                <p id="dashboard-count-label" class="font-body-sm text-body-sm text-on-surface-variant">24 total tickets · 12 open</p>
+            </div>
+        </header>
+
+        <!-- Control Bar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-md">
+            <div class="relative w-full max-w-[340px]">
+                <span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant !text-[20px]">search</span>
+                <input onkeyup="handleSearch(this.value)" class="w-full pl-[36px] pr-md py-[8px] bg-white border border-outline-variant rounded focus:outline-none focus:ring-2 focus:ring-primary-container/20 focus:border-primary-container font-body-base text-body-base transition-all" placeholder="Search tickets..." type="text"/>
+            </div>
+            <div class="flex items-center bg-surface-container-low p-xs rounded-lg gap-xs">
+                <button onclick="handleStatusFilter('ALL')" id="filter-all" class="px-md py-xs font-label-md text-label-md bg-white text-primary shadow-sm rounded-md transition-all">All</button>
+                <button onclick="handleStatusFilter('OPEN')" id="filter-open" class="px-md py-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">Open</button>
+                <button onclick="handleStatusFilter('IN_PROGRESS')" id="filter-inprogress" class="px-md py-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">In Progress</button>
+                <button onclick="handleStatusFilter('CLOSED')" id="filter-closed" class="px-md py-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">Closed</button>
+            </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low border-b border-outline-variant">
+                            <th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Ticket ID</th>
+                            <th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Customer</th>
+                            <th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Subject</th>
+                            <th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider text-center">Status</th>
+                            <th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Date Created</th>
+                            <th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-table-body" class="divide-y divide-surface-container-high">
+                        <!-- Dynamic Rows Inject Here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Table Empty State -->
+            <div id="table-empty-state" class="hidden py-xl text-center bg-white">
+                <span class="material-symbols-outlined text-[48px] text-outline-variant mb-2">assignment_late</span>
+                <p class="font-body-base text-body-base text-on-surface-variant">No tickets found matching current filters.</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="px-md py-sm bg-surface-container-low border-t border-outline-variant flex items-center justify-between">
+                <span id="pagination-label" class="font-body-sm text-body-sm text-on-surface-variant">Showing 1 to 5 of 5 tickets</span>
+                <div class="flex items-center gap-xs">
+                    <button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-md transition-all disabled:opacity-30" disabled>
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <div class="flex items-center gap-xs">
+                        <button class="w-8 h-8 rounded bg-primary text-on-primary font-label-md text-label-md shadow-sm">1</button>
+                    </div>
+                    <button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-md transition-all disabled:opacity-30" disabled>
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric Section (Bento Style) -->
+        <section class="mt-xl grid grid-cols-1 md:grid-cols-3 gap-lg">
+            <div class="bg-white p-lg border border-outline-variant rounded-xl shadow-sm">
+                <div class="flex items-center justify-between mb-sm">
+                    <span class="font-label-md text-label-md text-secondary uppercase">Resolution Rate</span>
+                    <span class="material-symbols-outlined text-primary-container">trending_up</span>
+                </div>
+                <div class="flex items-baseline gap-xs">
+                    <span id="metric-resolution-rate" class="font-display text-display text-on-surface">94.2%</span>
+                    <span class="font-label-sm text-label-sm text-primary">+2.4%</span>
+                </div>
+                <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Average for last 7 days</p>
+            </div>
+            <div class="bg-white p-lg border border-outline-variant rounded-xl shadow-sm">
+                <div class="flex items-center justify-between mb-sm">
+                    <span class="font-label-md text-label-md text-secondary uppercase">Response Time</span>
+                    <span class="material-symbols-outlined text-tertiary-container">schedule</span>
+                </div>
+                <div class="flex items-baseline gap-xs">
+                    <span class="font-display text-display text-on-surface">1h 12m</span>
+                    <span class="font-label-sm text-label-sm text-tertiary">-15m</span>
+                </div>
+                <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Fastest in the segment</p>
+            </div>
+            <div class="bg-white p-lg border border-outline-variant rounded-xl shadow-sm">
+                <div class="flex items-center justify-between mb-sm">
+                    <span class="font-label-md text-label-md text-secondary uppercase">CSAT Score</span>
+                    <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+                </div>
+                <div class="flex items-baseline gap-xs">
+                    <span class="font-display text-display text-on-surface">4.8/5.0</span>
+                    <span class="font-label-sm text-label-sm text-secondary">stable</span>
+                </div>
+                <p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">From 112 customer surveys</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- SECTION: TICKET DETAIL VIEW -->
+    <main id="view-ticket-detail" class="fade-in hidden flex-grow w-full max-w-7xl mx-auto px-lg py-xl">
+        <!-- Header Section -->
+        <div class="mb-xl">
+            <button onclick="navigateTo('dashboard')" class="flex items-center text-primary gap-xs font-label-md text-label-md mb-sm hover:underline">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                Back to Tickets
+            </button>
+            <div class="flex flex-col md:flex-row md:items-center gap-md">
+                <span id="detail-ticket-id-badge" class="bg-secondary-container text-on-secondary-container px-sm py-xs rounded font-label-md text-label-md w-fit">TKT-001</span>
+                <h1 id="detail-subject" class="font-headline-lg text-headline-lg text-on-surface">API Integration failure on checkout endpoint</h1>
+            </div>
+            <p class="mt-sm font-body-sm text-body-sm text-on-surface-variant">
+                Created <span id="detail-created-at">Jun 2, 2025</span> · <span id="detail-customer-email" class="font-medium text-on-surface">customer@email.com</span>
+            </p>
+        </div>
+
+        <!-- Two Column Layout (65/35) -->
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-xl">
+            <!-- Left Column: Content & Communication -->
+            <div class="space-y-xl">
+                <!-- Description Card -->
+                <section class="bg-white border border-outline-variant rounded-xl p-lg shadow-sm">
+                    <div class="flex items-center justify-between mb-md">
+                        <h2 class="font-title-lg text-title-lg text-on-surface">Description</h2>
+                    </div>
+                    <div id="detail-description" class="font-body-base text-body-base text-secondary space-y-md whitespace-pre-line">
+                        Description content goes here...
+                    </div>
+                </section>
+
+                <!-- Internal Notes Section -->
+                <section class="space-y-md">
+                    <h2 class="font-title-lg text-title-lg text-on-surface px-xs">Internal Notes</h2>
+                    <div id="notes-thread-container" class="space-y-base">
+                        <!-- Dynamic Notes Inject Here -->
+                    </div>
+                    
+                    <!-- Add Note Textarea -->
+                    <div class="mt-lg bg-white border border-outline-variant rounded-xl p-md shadow-sm">
+                        <textarea id="note-input" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-md font-body-base text-body-base focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px] outline-none transition-shadow" placeholder="Add an internal note..." rows="3"></textarea>
+                        <div class="flex justify-between items-center mt-sm">
+                            <span class="text-body-sm text-on-surface-variant">💡 Pro Tip: Press Ctrl + Enter to save quickly.</span>
+                            <button onclick="addInternalNote()" class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all shadow-sm">Add Note</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Metadata & Actions -->
+            <div class="space-y-lg">
+                <!-- Details Card -->
+                <section class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+                    <div class="px-lg py-md border-b border-outline-variant bg-surface-container-low">
+                        <h3 class="font-title-lg text-title-lg text-on-surface">Ticket Details</h3>
+                    </div>
+                    <div class="p-lg space-y-lg">
+                        <!-- Status Selector -->
+                        <div>
+                            <label class="font-label-sm text-label-sm text-on-surface-variant block mb-xs">Status</label>
+                            <div class="relative">
+                                <select id="detail-status-select" onchange="updateTicketStatus(this.value)" class="w-full bg-white border border-outline-variant rounded-lg px-sm py-sm font-label-md text-label-md appearance-none focus:ring-1 focus:ring-primary outline-none cursor-pointer">
+                                    <option value="OPEN">Open</option>
+                                    <option value="IN_PROGRESS">In Progress</option>
+                                    <option value="CLOSED">Closed</option>
+                                </select>
+                                <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+                            </div>
+                        </div>
+
+                        <!-- Priority Selector -->
+                        <div>
+                            <label class="font-label-sm text-label-sm text-on-surface-variant block mb-xs">Priority</label>
+                            <div class="relative">
+                                <select id="detail-priority-select" onchange="updateTicketPriority(this.value)" class="w-full bg-white border border-outline-variant rounded-lg px-sm py-sm font-label-md text-label-md appearance-none focus:ring-1 focus:ring-primary outline-none cursor-pointer">
+                                    <option value="LOW">Low</option>
+                                    <option value="MEDIUM">Medium</option>
+                                    <option value="HIGH">High</option>
+                                    <option value="URGENT">Urgent</option>
+                                </select>
+                                <span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <hr class="border-outline-variant"/>
+
+                        <!-- Customer Metadata -->
+                        <div class="space-y-md">
+                            <h4 class="font-label-md text-label-md text-on-surface">Customer Info</h4>
+                            <div class="flex items-center gap-md">
+                                <img alt="Customer Profile" class="w-10 h-10 rounded-full bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnBwImbsNmw_BZOExWyvVvZ-tWvEXZZVun4x5jB-BnSeyE3iT_GPvxyJkQEk6cHokYHflc-xlISWe8D3daR71b7UsjA5cR4Qvh8_MKp7raOv6DtoC2XHeI-XoCOWh39JJunNjN9AhrUFIuF8M5T8Bd0MYKdXlQpxg2fJ_oTtOgUeQRce9ueYEMASUf66gqePNjGRk_aI4tDwVB5mE0kSoACif77aMMqXQpkuzUYtoGT5xLWpOTnYCRzTFKrhwhInA9zHuY3qVmUAjE"/>
+                                <div>
+                                    <p id="detail-customer-name" class="font-label-md text-label-md text-on-surface">Customer Name</p>
+                                    <p class="font-body-sm text-body-sm text-on-surface-variant">Enterprise Plan</p>
+                                </div>
+                            </div>
+                            <div class="space-y-sm pt-2">
+                                <div class="flex justify-between">
+                                    <span class="font-body-sm text-body-sm text-on-surface-variant">Account Manager</span>
+                                    <span class="font-body-sm text-body-sm text-on-surface">David Chen</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="font-body-sm text-body-sm text-on-surface-variant">SLA Category</span>
+                                    <span class="font-body-sm text-body-sm text-on-surface">4-hour response</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Actions Card -->
+                <section class="bg-white border border-outline-variant rounded-xl p-lg flex flex-col gap-base shadow-sm">
+                    <button onclick="alert('Email communication is simulated. System is ready.')" class="w-full py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:brightness-110 active:scale-95 transition-all shadow-sm">
+                        <span class="material-symbols-outlined text-[18px]">send</span>
+                        Reply to Customer
+                    </button>
+                    <button onclick="alert('Ticket assignment list triggers in the full app.')" class="w-full py-sm border border-outline text-on-surface-variant rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-surface-container transition-colors active:scale-95">
+                        <span class="material-symbols-outlined text-[18px]">assignment_ind</span>
+                        Assign Ticket
+                    </button>
+                    <button id="detail-close-btn" onclick="updateTicketStatus('CLOSED')" class="w-full py-sm text-error font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-error-container/20 rounded-lg transition-colors active:scale-95 mt-sm">
+                        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                        Close Ticket
+                    </button>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- SECTION: CREATE NEW TICKET -->
+    <main id="view-new-ticket" class="fade-in hidden flex-grow w-full max-w-7xl mx-auto px-lg py-xl flex flex-col items-center">
+        <!-- Back Navigation -->
+        <div class="w-full max-w-[640px] mb-lg">
+            <button onclick="navigateTo('dashboard')" class="inline-flex items-center gap-xs font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors group">
+                <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                Back to Tickets
+            </button>
+        </div>
+        <!-- Header -->
+        <div class="w-full max-w-[640px] mb-xl text-left">
+            <h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Create New Ticket</h1>
+            <p class="font-body-base text-body-base text-on-surface-variant">Please fill out the details below to open a new support request. Our team will review it shortly.</p>
+        </div>
+        <!-- Form Card -->
+        <div class="w-full max-w-[640px] bg-white border border-outline-variant rounded-xl p-xl shadow-sm">
+            <form id="new-ticket-form" onsubmit="handleFormSubmit(event)" class="space-y-lg">
+                <!-- Customer Name -->
+                <div class="flex flex-col gap-xs">
+                    <label class="text-[13px] font-medium text-on-surface-variant" for="customer_name">Customer Name</label>
+                    <input required class="w-full h-10 px-md border border-outline-variant rounded-md text-body-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-outline" id="customer_name" placeholder="e.g. Alexander Hamilton" type="text"/>
+                </div>
+                <!-- Customer Email -->
+                <div class="flex flex-col gap-xs">
+                    <label class="text-[13px] font-medium text-on-surface-variant" for="customer_email">Customer Email</label>
+                    <input required class="w-full h-10 px-md border border-outline-variant rounded-md text-body-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-outline" id="customer_email" placeholder="alex@example.com" type="email"/>
+                </div>
+                <!-- Subject -->
+                <div class="flex flex-col gap-xs">
+                    <label class="text-[13px] font-medium text-on-surface-variant" for="subject">Subject</label>
+                    <input required class="w-full h-10 px-md border border-outline-variant rounded-md text-body-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-outline" id="subject" placeholder="Brief summary of the issue" type="text"/>
+                </div>
+                <!-- Priority Selector -->
+                <div class="flex flex-col gap-xs">
+                    <label class="text-[13px] font-medium text-on-surface-variant" for="priority">Priority</label>
+                    <select id="priority" class="w-full h-10 px-md border border-outline-variant rounded-md text-body-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM" selected>Medium</option>
+                        <option value="HIGH">High</option>
+                        <option value="URGENT">Urgent</option>
+                    </select>
+                </div>
+                <!-- Description -->
+                <div class="flex flex-col gap-xs">
+                    <label class="text-[13px] font-medium text-on-surface-variant" for="description">Description</label>
+                    <textarea required class="w-full px-md py-sm border border-outline-variant rounded-md text-body-base focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-outline resize-none" id="description" placeholder="Provide as much detail as possible..." rows="5"></textarea>
+                </div>
+                <!-- Action Footer -->
+                <div class="pt-md mt-md flex items-center justify-end gap-md">
+                    <button onclick="navigateTo('dashboard')" class="px-lg h-10 font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors rounded-md active:scale-95 duration-150" type="button">
+                        Cancel
+                    </button>
+                    <button id="submit-ticket-btn" class="px-lg h-10 font-label-md text-label-md bg-primary-container text-white rounded-md hover:bg-primary transition-colors active:scale-95 duration-150 shadow-sm flex items-center gap-xs" type="submit">
+                        Submit Ticket
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- Status Tip -->
+        <div class="w-full max-w-[640px] mt-xl p-md bg-surface-container-low rounded-lg border border-dashed border-outline-variant flex gap-md items-start">
+            <span class="material-symbols-outlined text-primary text-[20px] mt-xs">info</span>
+            <div>
+                <p class="font-label-md text-label-md text-on-surface mb-xs">Pro Tip</p>
+                <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Attaching screenshots often helps our support team resolve issues 30% faster. You can drag and drop images directly into the description field above.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-surface-container-low dark:bg-surface-dim border-t border-outline-variant dark:border-outline mt-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center py-md px-lg w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-md">
+                <span class="font-display font-semibold text-on-surface-variant">SupportDesk CRM</span>
+                <span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 SupportDesk CRM. All rights reserved.</span>
+            </div>
+            <div class="flex gap-md mt-md md:mt-0">
+                <a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+                <a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+                <a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE STATE SCRIPT (PROTOTYPE CORE) -->
+    <script>
+        // Core Mock Database State
+        let tickets = [
+            {
+                id: "TKT-001",
+                customerName: "Alex Rivera",
+                customerEmail: "arivera@techflow.io",
+                subject: "Payment gateway integration failure on production environment",
+                description: "The checkout endpoint `/api/v1/checkout` is returning a 500 Internal Server Error for users trying to process payments with international credit cards. This was first reported by several enterprise customers in the EMEA region.\n\nSteps to reproduce:\n1. Set account locale to 'FR' or 'DE'\n2. Attempt checkout with a test Visa card\n3. Observe 500 status code in network logs.",
+                status: "OPEN",
+                priority: "URGENT",
+                dateCreated: "Oct 24, 2023 · 09:45",
+                notes: [
+                    { author: "Mark Wilson (Support)", text: "Notified the customer that we are looking into this. High priority as it's affecting revenue.", time: "5 hours ago" },
+                    { author: "Sarah Jenkins (Engineering)", text: "I've looked into the logs and it seems like the currency conversion service is timing out for EUR transactions. Investigating the gateway middleware now.", time: "2 hours ago" }
+                ]
+            },
+            {
+                id: "TKT-002",
+                customerName: "Sarah Jenkins",
+                customerEmail: "s.jenkins@brightview.com",
+                subject: "Unable to export Q3 analytics report to PDF format",
+                description: "Exporting Q3 dashboard panels to PDF halts at 60% and returns a connection timeout after 30 seconds. This is blocking board meeting preparations for Brightview.",
+                status: "IN_PROGRESS",
+                priority: "HIGH",
+                dateCreated: "Oct 23, 2023 · 14:20",
+                notes: []
+            },
+            {
+                id: "TKT-003",
+                customerName: "Marcus Thorne",
+                customerEmail: "mthorne@nexus.net",
+                subject: "New user onboarding flow missing localized strings",
+                description: "The onboarding steps display key strings instead of translations when the browser language is set to Spanish or French. Missing keys: onboarding.welcome and onboarding.step1.title.",
+                status: "CLOSED",
+                priority: "LOW",
+                dateCreated: "Oct 23, 2023 · 11:10",
+                notes: []
+            },
+            {
+                id: "TKT-004",
+                customerName: "Elena Rodriguez",
+                customerEmail: "erodriguez@solarsystems.io",
+                subject: "Password reset link not arriving for new enterprise seats",
+                description: "New users invited to Solar Systems enterprise portal report that they are not receiving the verification or password reset links. Verified spam folders, and no emails hit their servers.",
+                status: "OPEN",
+                priority: "URGENT",
+                dateCreated: "Oct 22, 2023 · 16:55",
+                notes: []
+            },
+            {
+                id: "TKT-005",
+                customerName: "David Kim",
+                customerEmail: "dkim@velocitypartners.com",
+                subject: "Bulk import of customer CSV stalling at 85% completion",
+                description: "CSV importer halts indefinitely when processing batches larger than 10,000 records. Stalls exactly at 85% completion mark without thrown exception in the console.",
+                status: "IN_PROGRESS",
+                priority: "MEDIUM",
+                dateCreated: "Oct 22, 2023 · 10:05",
+                notes: []
+            }
+        ];
+
+        // Active State Filters
+        let currentFilter = "ALL";
+        let searchQuery = "";
+        let selectedTicketId = null;
+
+        // On Load Initializer
+        window.addEventListener("DOMContentLoaded", () => {
+            renderDashboardTable();
+            setupHotkeys();
+        });
+
+        // Navigation Controller
+        function navigateTo(viewName) {
+            // Hide all main elements
+            document.getElementById("view-dashboard").classList.add("hidden");
+            document.getElementById("view-ticket-detail").classList.add("hidden");
+            document.getElementById("view-new-ticket").classList.add("hidden");
+
+            // Reset navigation header highlights
+            const navBtn = document.getElementById("nav-dashboard-btn");
+            if (viewName === "dashboard") {
+                navBtn.classList.add("text-primary", "border-b-2", "border-primary", "pb-1");
+                navBtn.classList.remove("text-on-surface-variant");
+            } else {
+                navBtn.classList.remove("text-primary", "border-b-2", "border-primary", "pb-1");
+                navBtn.classList.add("text-on-surface-variant");
+            }
+
+            // Show target element
+            if (viewName === "dashboard") {
+                document.getElementById("view-dashboard").classList.remove("hidden");
+                renderDashboardTable();
+            } else if (viewName === "ticket-detail") {
+                document.getElementById("view-ticket-detail").classList.remove("hidden");
+                renderTicketDetails();
+            } else if (viewName === "new-ticket") {
+                document.getElementById("view-new-ticket").classList.remove("hidden");
+                document.getElementById("new-ticket-form").reset();
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // Render Table Rows dynamically
+        function renderDashboardTable() {
+            const tableBody = document.getElementById("ticket-table-body");
+            const emptyState = document.getElementById("table-empty-state");
+            tableBody.innerHTML = "";
+
+            // Filter logic
+            let filtered = tickets.filter(t => {
+                const matchesStatus = (currentFilter === "ALL") || (t.status === currentFilter);
+                const matchesSearch = searchQuery === "" || 
+                    t.id.toLowerCase().includes(searchQuery) ||
+                    t.customerName.toLowerCase().includes(searchQuery) ||
+                    t.customerEmail.toLowerCase().includes(searchQuery) ||
+                    t.subject.toLowerCase().includes(searchQuery);
+                return matchesStatus && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove("hidden");
+            } else {
+                emptyState.classList.add("hidden");
+            }
+
+            // Inject rows
+            filtered.forEach(ticket => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-surface-container transition-colors group cursor-pointer border-b border-surface-container-high";
+                tr.onclick = () => {
+                    selectedTicketId = ticket.id;
+                    navigateTo("ticket-detail");
+                };
+
+                // Format status badge
+                let statusBadgeClass = "";
+                if (ticket.status === "OPEN") {
+                    statusBadgeClass = "bg-error-container text-on-error-container";
+                } else if (ticket.status === "IN_PROGRESS") {
+                    statusBadgeClass = "bg-secondary-container text-on-secondary-container";
+                } else {
+                    statusBadgeClass = "bg-surface-container-highest text-on-surface-variant";
+                }
+
+                tr.innerHTML = `
+                    <td class="px-md py-md font-label-md text-label-md text-primary font-mono tracking-tighter">${ticket.id}</td>
+                    <td class="px-md py-md">
+                        <div class="flex flex-col">
+                            <span class="font-label-md text-label-md text-on-surface">${ticket.customerName}</span>
+                            <span class="font-body-sm text-body-sm text-on-surface-variant">${ticket.customerEmail}</span>
+                        </div>
+                    </td>
+                    <td class="px-md py-md max-w-[280px]">
+                        <span class="font-body-base text-body-base text-on-surface truncate block">${ticket.subject}</span>
+                    </td>
+                    <td class="px-md py-md text-center">
+                        <span class="inline-flex items-center px-sm py-[2px] rounded-full font-label-sm text-label-sm uppercase ${statusBadgeClass}">
+                            ${ticket.status.replace('_', ' ')}
+                        </span>
+                    </td>
+                    <td class="px-md py-md font-body-sm text-body-sm text-on-surface-variant whitespace-nowrap">${ticket.dateCreated}</td>
+                    <td class="px-md py-md text-right">
+                        <span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">more_vert</span>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            // Update Header Counts
+            const totalCount = tickets.length;
+            const openCount = tickets.filter(t => t.status === "OPEN").length;
+            document.getElementById("dashboard-count-label").innerText = `${totalCount} total tickets · ${openCount} open`;
+            document.getElementById("pagination-label").innerText = `Showing 1 to ${filtered.length} of ${filtered.length} tickets`;
+            
+            // Recalculate dynamic Bento metrics
+            const closedCount = tickets.filter(t => t.status === "CLOSED").length;
+            const resRate = totalCount > 0 ? ((closedCount / totalCount) * 100).toFixed(1) : "0.0";
+            document.getElementById("metric-resolution-rate").innerText = `${resRate}%`;
+        }
+
+        // Handle search typing
+        function handleSearch(val) {
+            searchQuery = val.trim().toLowerCase();
+            renderDashboardTable();
+        }
+
+        // Handle filter buttons
+        function handleStatusFilter(status) {
+            currentFilter = status;
+            
+            // Remove active classes from all buttons
+            ["filter-all", "filter-open", "filter-inprogress", "filter-closed"].forEach(id => {
+                const btn = document.getElementById(id);
+                btn.className = "px-md py-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors";
+            });
+
+            // Add active to selected
+            let activeId = "filter-all";
+            if (status === "OPEN") activeId = "filter-open";
+            else if (status === "IN_PROGRESS") activeId = "filter-inprogress";
+            else if (status === "CLOSED") activeId = "filter-closed";
+
+            document.getElementById(activeId).className = "px-md py-xs font-label-md text-label-md bg-white text-primary shadow-sm rounded-md transition-all";
+            
+            renderDashboardTable();
+        }
+
+        // Render ticket details page
+        function renderTicketDetails() {
+            const ticket = tickets.find(t => t.id === selectedTicketId);
+            if (!ticket) return;
+
+            document.getElementById("detail-ticket-id-badge").innerText = ticket.id;
+            document.getElementById("detail-subject").innerText = ticket.subject;
+            document.getElementById("detail-created-at").innerText = ticket.dateCreated;
+            document.getElementById("detail-customer-email").innerText = ticket.customerEmail;
+            document.getElementById("detail-customer-name").innerText = ticket.customerName;
+            document.getElementById("detail-description").innerText = ticket.description;
+            document.getElementById("detail-status-select").value = ticket.status;
+            document.getElementById("detail-priority-select").value = ticket.priority;
+
+            // Handle close ticket button
+            const closeBtn = document.getElementById("detail-close-btn");
+            if (ticket.status === "CLOSED") {
+                closeBtn.classList.add("hidden");
+            } else {
+                closeBtn.classList.remove("hidden");
+            }
+
+            renderNotesThread(ticket);
+        }
+
+        // Render notes thread inside ticket details
+        function renderNotesThread(ticket) {
+            const container = document.getElementById("notes-thread-container");
+            container.innerHTML = "";
+
+            if (ticket.notes.length === 0) {
+                container.innerHTML = `
+                    <div class="py-md px-md bg-surface-container-low rounded-lg border border-dashed border-outline-variant text-center">
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">No internal notes added yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            ticket.notes.forEach(note => {
+                const noteDiv = document.createElement("div");
+                noteDiv.className = "bg-surface-container-low border-l-4 border-primary p-md rounded-r-lg shadow-sm fade-in";
+                noteDiv.innerHTML = `
+                    <div class="flex items-center justify-between mb-sm">
+                        <span class="font-label-md text-label-md text-on-surface font-semibold">${note.author}</span>
+                        <span class="font-label-sm text-label-sm text-on-surface-variant">${note.time}</span>
+                    </div>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed whitespace-pre-line">${note.text}</p>
+                `;
+                container.appendChild(noteDiv);
+            });
+        }
+
+        // Add internal note logic
+        function addInternalNote() {
+            const ticket = tickets.find(t => t.id === selectedTicketId);
+            const input = document.getElementById("note-input");
+            const noteText = input.value.trim();
+            if (!ticket || !noteText) return;
+
+            // Mock saving note
+            ticket.notes.push({
+                author: "Demo Support Agent (You)",
+                text: noteText,
+                time: "Just now"
+            });
+
+            input.value = "";
+            renderNotesThread(ticket);
+        }
+
+        // Update status of ticket
+        function updateTicketStatus(status) {
+            const ticket = tickets.find(t => t.id === selectedTicketId);
+            if (!ticket) return;
+
+            ticket.status = status;
+            renderTicketDetails();
+            renderDashboardTable();
+        }
+
+        // Update priority of ticket
+        function updateTicketPriority(priority) {
+            const ticket = tickets.find(t => t.id === selectedTicketId);
+            if (!ticket) return;
+
+            ticket.priority = priority;
+            renderTicketDetails();
+            renderDashboardTable();
+        }
+
+        // Submit new ticket logic
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById("submit-ticket-btn");
+            const name = document.getElementById("customer_name").value.trim();
+            const email = document.getElementById("customer_email").value.trim();
+            const subject = document.getElementById("subject").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const priority = document.getElementById("priority").value;
+
+            // Trigger spinner
+            const originalText = submitBtn.innerText;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+            `;
+
+            setTimeout(() => {
+                // Generate sequential ID
+                const nextIdNum = tickets.length + 1;
+                const nextId = `TKT-${String(nextIdNum).padStart(3, '0')}`;
+                
+                // Format Date
+                const now = new Date();
+                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const dateStr = `${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()} · ${hours}:${minutes}`;
+
+                // Push new ticket record
+                tickets.push({
+                    id: nextId,
+                    customerName: name,
+                    customerEmail: email,
+                    subject: subject,
+                    description: description,
+                    status: "OPEN",
+                    priority: priority,
+                    dateCreated: dateStr,
+                    notes: []
+                });
+
+                submitBtn.innerHTML = 'Success!';
+                submitBtn.classList.replace('bg-primary-container', 'bg-green-600');
+
+                setTimeout(() => {
+                    submitBtn.innerText = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.classList.replace('bg-green-600', 'bg-primary-container');
+                    navigateTo("dashboard");
+                }, 1000);
+
+            }, 1200);
+        }
+
+        // Setup hotkey listener (Ctrl + Enter to submit note)
+        function setupHotkeys() {
+            const noteInput = document.getElementById("note-input");
+            noteInput.addEventListener("keydown", (e) => {
+                if (e.ctrlKey && e.key === "Enter") {
+                    addInternalNote();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

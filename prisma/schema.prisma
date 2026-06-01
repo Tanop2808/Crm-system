@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Ticket {
+  id            String   @id @default(cuid())
+  ticketId      String   @unique          // Human-readable sequential ID (e.g. TKT-001)
+  customerName  String
+  customerEmail String
+  subject       String
+  description   String
+  status        Status   @default(OPEN)
+  priority      Priority @default(MEDIUM)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  notes         Note[]
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  content    String
+  isInternal Boolean  @default(false)
+  author     String   @default("Support Agent")
+  createdAt  DateTime @default(now())
+  ticketId   String
+  ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+enum Status {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}

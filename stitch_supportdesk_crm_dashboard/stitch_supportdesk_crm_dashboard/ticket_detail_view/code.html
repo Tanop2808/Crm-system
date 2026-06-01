@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SupportDesk - Ticket Detail View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-primary-container": "#dad7ff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed": "#d8e3fb",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-tint": "#4d44e3",
+                        "primary-fixed": "#e2dfff",
+                        "surface-variant": "#e1e3e4",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#545f73",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "outline-variant": "#c7c4d8",
+                        "primary-container": "#4f46e5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "primary": "#3525cd",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "tertiary": "#7e3000",
+                        "surface-container-high": "#e7e8e9",
+                        "surface": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-container": "#586377",
+                        "secondary-container": "#d5e0f8",
+                        "on-surface-variant": "#464555",
+                        "tertiary-container": "#a44100",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "on-error-container": "#93000a",
+                        "outline": "#777587",
+                        "on-background": "#191c1d",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-tertiary-fixed": "#351000",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3323cc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "32px",
+                        "margin": "24px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "display": ["Inter"],
+                        "body-base": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-base": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 flex justify-between items-center px-lg w-full bg-surface dark:bg-surface-container-highest border-b border-outline-variant dark:border-outline h-[56px]">
+<div class="flex items-center gap-xl">
+<span class="text-title-lg font-display font-bold text-primary dark:text-primary-fixed-dim">SupportDesk</span>
+<nav class="hidden md:flex gap-md h-full items-center">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors px-xs py-xs" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1" href="#">Tickets</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors px-xs py-xs" href="#">Customers</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors px-xs py-xs" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden sm:flex items-center bg-surface-container-low px-sm py-xs rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-40" placeholder="Search..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-xs rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-xs rounded-full transition-colors">help_outline</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo5Snj2DPu8CGQFRxQLtr0AzpFqI9QXp2OxZIDOxbdjmoQe4olKdh-lWcG45CpkuC3rGDK3jgveYKqsyfsI-qnf2xpDk94fbxAUlMWrS-TBAwfOY6eJouuOG1gOVzLMpJn36qMbgLmIvX25WgNnAP9l_g0IzDnuqbggNd7IswVAHiDtddpSsPayP76JZ16I1O7hrPMu4Dw_XKMgDg335Win66eDjKSS6V3Gimso2dHrtMzYaFT6SEtsHJReBTogIdYV-X5OknKsnkv"/>
+</div>
+</header>
+<main class="flex-grow w-full max-w-7xl mx-auto px-lg py-xl">
+<!-- Header Section -->
+<div class="mb-xl">
+<a class="flex items-center text-primary gap-xs font-label-md text-label-md mb-sm hover:underline" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                Back to Tickets
+            </a>
+<div class="flex flex-col md:flex-row md:items-center gap-md">
+<span class="bg-secondary-container text-on-secondary-container px-sm py-xs rounded font-label-md text-label-md w-fit">TKT-001</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">API Integration failure on checkout endpoint</h1>
+</div>
+<p class="mt-sm font-body-sm text-body-sm text-on-surface-variant">
+                Created Jun 2, 2025 · Last updated 3 hours ago · <span class="font-medium text-on-surface">customer@email.com</span>
+</p>
+</div>
+<!-- Two Column Layout (65/35) -->
+<div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-xl">
+<!-- Left Column: Content & Communication -->
+<div class="space-y-xl">
+<!-- Description Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-title-lg text-title-lg text-on-surface">Description</h2>
+<button class="text-primary font-label-md text-label-md hover:underline">Edit</button>
+</div>
+<div class="font-body-base text-body-base text-secondary space-y-md">
+<p>The checkout endpoint `/api/v1/checkout` is returning a 500 Internal Server Error for users trying to process payments with international credit cards. This was first reported by several enterprise customers in the EMEA region.</p>
+<p>Steps to reproduce:</p>
+<ul class="list-disc list-inside ml-md">
+<li>Set account locale to 'FR' or 'DE'</li>
+<li>Attempt checkout with a test Visa card</li>
+<li>Observe 500 status code in network logs</li>
+</ul>
+</div>
+</section>
+<!-- Internal Notes Section -->
+<section class="space-y-md">
+<h2 class="font-title-lg text-title-lg text-on-surface px-xs">Internal Notes</h2>
+<div class="space-y-base">
+<!-- Note 1 -->
+<div class="bg-surface-container-low border-l-4 border-primary p-md rounded-r-lg shadow-sm">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-on-surface">Sarah Jenkins (Engineering)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 hours ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">I've looked into the logs and it seems like the currency conversion service is timing out for EUR transactions. Investigating the gateway middleware now.</p>
+</div>
+<!-- Note 2 -->
+<div class="bg-surface-container-low border-l-4 border-primary p-md rounded-r-lg shadow-sm">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-on-surface">Mark Wilson (Support)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 hours ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Notified the customer that we are looking into this. High priority as it's affecting revenue.</p>
+</div>
+</div>
+<!-- Add Note Textarea -->
+<div class="mt-lg">
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-md font-body-base text-body-base focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px] outline-none transition-shadow" placeholder="Add an internal note..." rows="3"></textarea>
+<div class="flex justify-end mt-sm">
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all">Add Note</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Metadata & Actions -->
+<div class="space-y-lg">
+<!-- Details Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant bg-surface-container-low">
+<h3 class="font-title-lg text-title-lg text-on-surface">Ticket Details</h3>
+</div>
+<div class="p-lg space-y-lg">
+<!-- Status -->
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-xs">Status</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-sm py-sm font-label-md text-label-md appearance-none focus:ring-1 focus:ring-primary outline-none">
+<option selected="">In Progress</option>
+<option>Open</option>
+<option>Resolved</option>
+<option>Pending</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Priority -->
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-xs">Priority</label>
+<span class="inline-flex items-center px-sm py-xs bg-error-container text-on-error-container rounded-full font-label-md text-label-md">
+<span class="material-symbols-outlined text-[14px] mr-xs" style="font-variation-settings: 'FILL' 1;">error</span>
+                                Urgent
+                            </span>
+</div>
+<!-- Divider -->
+<hr class="border-outline-variant"/>
+<!-- Customer Metadata -->
+<div class="space-y-md">
+<h4 class="font-label-md text-label-md text-on-surface">Customer Info</h4>
+<div class="flex items-center gap-md">
+<img alt="Customer Profile" class="w-10 h-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnBwImbsNmw_BZOExWyvVvZ-tWvEXZZVun4x5jB-BnSeyE3iT_GPvxyJkQEk6cHokYHflc-xlISWe8D3daR71b7UsjA5cR4Qvh8_MKp7raOv6DtoC2XHeI-XoCOWh39JJunNjN9AhrUFIuF8M5T8Bd0MYKdXlQpxg2fJ_oTtOgUeQRce9ueYEMASUf66gqePNjGRk_aI4tDwVB5mE0kSoACif77aMMqXQpkuzUYtoGT5xLWpOTnYCRzTFKrhwhInA9zHuY3qVmUAjE"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Tech Corp EMEA</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Enterprise Plan</p>
+</div>
+</div>
+<div class="space-y-sm">
+<div class="flex justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Account Manager</span>
+<span class="font-body-sm text-body-sm text-on-surface">David Chen</span>
+</div>
+<div class="flex justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">SLA Category</span>
+<span class="font-body-sm text-body-sm text-on-surface">4-hour response</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Actions Card -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col gap-base">
+<button class="w-full py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                        Reply to Customer
+                    </button>
+<button class="w-full py-sm border border-outline text-on-surface-variant rounded-lg font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-surface-container transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">assignment_ind</span>
+                        Assign Ticket
+                    </button>
+<button class="w-full py-sm text-error font-label-md text-label-md flex items-center justify-center gap-sm hover:bg-error-container/20 rounded-lg transition-colors active:scale-95 mt-sm">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                        Close Ticket
+                    </button>
+</section>
+<!-- Helpful Tip -->
+<div class="p-lg bg-secondary-container/30 border border-secondary-container rounded-xl">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-on-secondary-container">lightbulb</span>
+<div>
+<p class="font-label-md text-label-md text-on-secondary-container">Pro Tip</p>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant mt-xs">Use <kbd class="px-xs py-[2px] bg-surface-container border border-outline-variant rounded text-[10px]">Ctrl</kbd> + <kbd class="px-xs py-[2px] bg-surface-container border border-outline-variant rounded text-[10px]">Enter</kbd> to quickly save an internal note.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto border-t border-outline-variant dark:border-outline bg-surface-container-low dark:bg-surface-dim">
+<div class="flex flex-col md:flex-row justify-between items-center py-md px-lg w-full max-w-7xl mx-auto gap-md">
+<span class="font-display font-semibold text-on-surface-variant">SupportDesk CRM</span>
+<div class="flex gap-lg">
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-surface-variant opacity-80">© 2024 SupportDesk CRM. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for status dropdown color change preview
+        const statusSelect = document.querySelector('select');
+        statusSelect?.addEventListener('change', (e) => {
+            console.log('Status updated to:', e.target.value);
+            // This could trigger a toast or backend sync
+        });
+    </script>
+</body></html>

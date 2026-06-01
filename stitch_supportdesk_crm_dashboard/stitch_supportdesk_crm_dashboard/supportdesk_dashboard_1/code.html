@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SupportDesk Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-primary-container": "#dad7ff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container": "#edeeef",
+                        "secondary-fixed": "#d8e3fb",
+                        "inverse-primary": "#c3c0ff",
+                        "surface-tint": "#4d44e3",
+                        "primary-fixed": "#e2dfff",
+                        "surface-variant": "#e1e3e4",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#545f73",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "outline-variant": "#c7c4d8",
+                        "primary-container": "#4f46e5",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "primary": "#3525cd",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "tertiary": "#7e3000",
+                        "surface-container-high": "#e7e8e9",
+                        "surface": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed": "#0f0069",
+                        "on-secondary-container": "#586377",
+                        "secondary-container": "#d5e0f8",
+                        "on-surface-variant": "#464555",
+                        "tertiary-container": "#a44100",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "on-error-container": "#93000a",
+                        "outline": "#777587",
+                        "on-background": "#191c1d",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-tertiary-fixed": "#351000",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#3323cc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "32px",
+                        "margin": "24px",
+                        "sm": "8px",
+                        "base": "8px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "display": ["Inter"],
+                        "body-base": ["Inter"],
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-base": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "500"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="sticky top-0 z-50 flex justify-between items-center px-lg w-full bg-surface dark:bg-surface-container-highest h-[56px] border-b border-outline-variant dark:border-outline">
+<div class="flex items-center gap-xl">
+<span class="text-title-lg font-display font-bold text-primary dark:text-primary-fixed-dim">SupportDesk</span>
+<div class="hidden md:flex items-center gap-md">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150 px-sm py-1 rounded" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 px-sm" href="#">Tickets</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150 px-sm py-1 rounded" href="#">Customers</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-150 px-sm py-1 rounded" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden sm:flex items-center gap-sm">
+<button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<button class="bg-primary-container text-on-primary font-label-md text-label-md px-md py-sm rounded hover:opacity-90 transition-all active:scale-95 flex items-center gap-xs">
+<span class="material-symbols-outlined !text-[18px]" data-icon="add">add</span>
+                New Ticket
+            </button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A close-up professional headshot of a friendly support agent with a warm smile, wearing a modern charcoal sweater. The background is a brightly lit, out-of-focus modern office space with clean lines and soft daylighting. The image conveys trust, efficiency, and a high-end corporate aesthetic consistent with a minimalist CRM platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlrSBr9K441pwz5cBLVYEAMBhpzY7GGqp-aLUuV4IdTL9yl2sQqcoE_iWkz_oBdVTbefdIftnBjvv5OWhm0GjhVPA6v8jTTKP8K4mm4co7edP_fTVrbcJ8q85YhphWwFPdXg92skOAjEL2u7Rqib_N7LqnGQnn0aaUZMAzhvNB23fD7te4Y2C9prXpTGqqI-ccXCe4Cbr85LcVYkF_gX3Y7taOCOnWByFdu9NykHTeg1F9WGEjyPGmg4MRtjJvcxq9eGha9QzduMAo"/>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-lg py-xl">
+<!-- Page Header -->
+<header class="mb-lg">
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight">Support Tickets</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">24 total tickets · 12 open</p>
+</header>
+<!-- Control Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-md">
+<div class="relative w-full max-w-[340px]">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant !text-[20px]" data-icon="search">search</span>
+<input class="w-full pl-[36px] pr-md py-[8px] bg-white border border-outline-variant rounded focus:outline-none focus:ring-2 focus:ring-primary-container/20 focus:border-primary-container font-body-base text-body-base transition-all" placeholder="Search tickets..." type="text"/>
+</div>
+<div class="flex items-center bg-surface-container-low p-xs rounded-lg gap-xs">
+<button class="px-md py-xs font-label-md text-label-md bg-white text-primary shadow-sm rounded-md transition-all">All</button>
+<button class="px-md py-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">Open</button>
+<button class="px-md py-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">In Progress</button>
+<button class="px-md py-xs font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">Closed</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Ticket ID</th>
+<th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Customer</th>
+<th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Subject</th>
+<th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider text-center">Status</th>
+<th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider">Date Created</th>
+<th class="px-md py-sm font-label-md text-label-md text-secondary uppercase tracking-wider"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer">
+<td class="px-md py-md font-label-md text-label-md text-primary font-mono tracking-tighter">#TK-8821</td>
+<td class="px-md py-md">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Alex Rivera</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">arivera@techflow.io</span>
+</div>
+</td>
+<td class="px-md py-md max-w-[280px]">
+<span class="font-body-base text-body-base text-on-surface truncate block">Payment gateway integration failure on production environment</span>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm uppercase">Open</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface-variant whitespace-nowrap">Oct 24, 2023 · 09:45</td>
+<td class="px-md py-md text-right">
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer">
+<td class="px-md py-md font-label-md text-label-md text-primary font-mono tracking-tighter">#TK-8819</td>
+<td class="px-md py-md">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Sarah Jenkins</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">s.jenkins@brightview.com</span>
+</div>
+</td>
+<td class="px-md py-md max-w-[280px]">
+<span class="font-body-base text-body-base text-on-surface truncate block">Unable to export Q3 analytics report to PDF format</span>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase">In Progress</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface-variant whitespace-nowrap">Oct 23, 2023 · 14:20</td>
+<td class="px-md py-md text-right">
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer">
+<td class="px-md py-md font-label-md text-label-md text-primary font-mono tracking-tighter">#TK-8815</td>
+<td class="px-md py-md">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Marcus Thorne</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">mthorne@nexus.net</span>
+</div>
+</td>
+<td class="px-md py-md max-w-[280px]">
+<span class="font-body-base text-body-base text-on-surface truncate block">New user onboarding flow missing localized strings</span>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm uppercase">Closed</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface-variant whitespace-nowrap">Oct 23, 2023 · 11:10</td>
+<td class="px-md py-md text-right">
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer">
+<td class="px-md py-md font-label-md text-label-md text-primary font-mono tracking-tighter">#TK-8812</td>
+<td class="px-md py-md">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Elena Rodriguez</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">erodriguez@solarsystems.io</span>
+</div>
+</td>
+<td class="px-md py-md max-w-[280px]">
+<span class="font-body-base text-body-base text-on-surface truncate block">Password reset link not arriving for new enterprise seats</span>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm uppercase">Open</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface-variant whitespace-nowrap">Oct 22, 2023 · 16:55</td>
+<td class="px-md py-md text-right">
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-container transition-colors group cursor-pointer">
+<td class="px-md py-md font-label-md text-label-md text-primary font-mono tracking-tighter">#TK-8809</td>
+<td class="px-md py-md">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">David Kim</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">dkim@velocitypartners.com</span>
+</div>
+</td>
+<td class="px-md py-md max-w-[280px]">
+<span class="font-body-base text-body-base text-on-surface truncate block">Bulk import of customer CSV stalling at 85% completion</span>
+</td>
+<td class="px-md py-md text-center">
+<span class="inline-flex items-center px-sm py-[2px] rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm uppercase">In Progress</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface-variant whitespace-nowrap">Oct 22, 2023 · 10:05</td>
+<td class="px-md py-md text-right">
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-md py-sm bg-surface-container-low border-t border-outline-variant flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1 to 10 of 24 tickets</span>
+<div class="flex items-center gap-xs">
+<button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-md transition-all disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="flex items-center gap-xs">
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-label-md text-label-md shadow-sm">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container font-label-md text-label-md text-on-surface-variant">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container font-label-md text-label-md text-on-surface-variant">3</button>
+</div>
+<button class="p-xs text-on-surface-variant hover:bg-surface-container rounded-md transition-all">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Metric Section (Bento Style) -->
+<section class="mt-xl grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="bg-white p-lg border border-outline-variant rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-secondary uppercase">Resolution Rate</span>
+<span class="material-symbols-outlined text-primary-container" data-icon="trending_up">trending_up</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display text-display text-on-surface">94.2%</span>
+<span class="font-label-sm text-label-sm text-primary">+2.4%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Average for last 7 days</p>
+</div>
+<div class="bg-white p-lg border border-outline-variant rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-secondary uppercase">Response Time</span>
+<span class="material-symbols-outlined text-tertiary-container" data-icon="schedule">schedule</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display text-display text-on-surface">1h 12m</span>
+<span class="font-label-sm text-label-sm text-tertiary">-15m</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Fastest in the segment</p>
+</div>
+<div class="bg-white p-lg border border-outline-variant rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-label-md text-label-md text-secondary uppercase">CSAT Score</span>
+<span class="material-symbols-outlined text-secondary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="flex items-baseline gap-xs">
+<span class="font-display text-display text-on-surface">4.8/5.0</span>
+<span class="font-label-sm text-label-sm text-secondary">stable</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">From 112 customer surveys</p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-surface-container-low dark:bg-surface-dim border-t border-outline-variant dark:border-outline mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center py-md px-lg w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-md">
+<span class="font-display font-semibold text-on-surface-variant">SupportDesk CRM</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 SupportDesk CRM. All rights reserved.</span>
+</div>
+<div class="flex gap-md mt-md md:mt-0">
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors opacity-80 hover:opacity-100" href="#">API Documentation</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('mousedown', () => {
+                row.classList.add('scale-[0.995]', 'bg-surface-container-high');
+            });
+            row.addEventListener('mouseup', () => {
+                row.classList.remove('scale-[0.995]', 'bg-surface-container-high');
+            });
+            row.addEventListener('mouseleave', () => {
+                row.classList.remove('scale-[0.995]', 'bg-surface-container-high');
+            });
+        });
+
+        // Tab switching simulation
+        const tabs = document.querySelectorAll('.flex.items-center.bg-surface-container-low button');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => {
+                    t.classList.remove('bg-white', 'text-primary', 'shadow-sm', 'rounded-md');
+                    t.classList.add('text-on-surface-variant');
+                });
+                tab.classList.add('bg-white', 'text-primary', 'shadow-sm', 'rounded-md');
+                tab.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>
