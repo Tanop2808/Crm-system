@@ -8,12 +8,17 @@ import { Plus, Bell, HelpCircle, LogOut, Settings, User } from 'lucide-react';
 export default function Navbar() {
   const pathname = usePathname();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const notificationsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
+      }
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
+        setIsNotificationsOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -71,9 +76,59 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-3 relative">
         <div className="hidden sm:flex items-center gap-1">
-          <button className="p-1 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
-            <Bell size={18} />
-          </button>
+          {/* Notifications Dropdown */}
+          <div className="relative" ref={notificationsRef}>
+            <button 
+              onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+              className="p-1 relative text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95"
+            >
+              <Bell size={18} />
+              {/* Notification Indicator Dot */}
+              <span className="absolute top-1 right-1.5 w-2 h-2 bg-error rounded-full border border-white"></span>
+            </button>
+
+            {isNotificationsOpen && (
+              <div className="absolute right-0 mt-2 w-72 bg-white border border-outline-variant rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="px-4 py-2 border-b border-surface-container flex justify-between items-center">
+                  <h3 className="text-sm font-semibold text-on-surface">Notifications</h3>
+                  <button className="text-xs text-primary hover:underline">Mark all as read</button>
+                </div>
+                <div className="max-h-64 overflow-y-auto">
+                  <Link href="/tickets/TKT-001" onClick={() => setIsNotificationsOpen(false)} className="block px-4 py-3 hover:bg-surface-container transition-colors border-b border-surface-container/50">
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 mt-1.5 rounded-full bg-primary flex-shrink-0"></div>
+                      <div>
+                        <p className="text-sm text-on-surface leading-tight"><span className="font-semibold">Sarah Jenkins</span> replied to <span className="font-semibold text-primary">TKT-001</span></p>
+                        <p className="text-xs text-on-surface-variant mt-1">2 hours ago</p>
+                      </div>
+                    </div>
+                  </Link>
+                  <Link href="/tickets/TKT-004" onClick={() => setIsNotificationsOpen(false)} className="block px-4 py-3 hover:bg-surface-container transition-colors border-b border-surface-container/50 bg-primary/5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 mt-1.5 rounded-full bg-error flex-shrink-0"></div>
+                      <div>
+                        <p className="text-sm text-on-surface leading-tight">New <span className="font-semibold text-error">URGENT</span> ticket <span className="font-semibold text-primary">TKT-004</span> created</p>
+                        <p className="text-xs text-on-surface-variant mt-1">5 hours ago</p>
+                      </div>
+                    </div>
+                  </Link>
+                  <div className="px-4 py-3 hover:bg-surface-container transition-colors opacity-70">
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 mt-1.5 rounded-full bg-transparent border border-outline-variant flex-shrink-0"></div>
+                      <div>
+                        <p className="text-sm text-on-surface leading-tight">System maintenance scheduled for tonight at 2AM UTC.</p>
+                        <p className="text-xs text-on-surface-variant mt-1">1 day ago</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-4 pt-2 pb-1 text-center border-t border-surface-container">
+                  <Link href="#" className="text-xs font-semibold text-primary hover:underline">View all notifications</Link>
+                </div>
+              </div>
+            )}
+          </div>
+
           <button className="p-1 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
             <HelpCircle size={18} />
           </button>
