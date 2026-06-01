@@ -38,10 +38,16 @@ export default function ReportsPage() {
       }
     };
 
+    // Initial fetch
     fetchReports();
+
+    // Set up polling interval for "Live Overview" (every 5 seconds)
+    const intervalId = setInterval(fetchReports, 5000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
-  if (loading) {
+  if (loading && !data) {
     return (
       <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-8 flex justify-center items-center h-[50vh]">
         <Loader2 className="animate-spin text-primary" size={32} />
@@ -69,9 +75,12 @@ export default function ReportsPage() {
             High-level analytics and performance metrics across all customer tickets.
           </p>
         </div>
-        <div className="bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant flex items-center gap-2 shadow-sm">
-          <BarChart3 size={16} className="text-primary" />
-          <span className="text-sm font-semibold text-on-surface-variant">Live Overview</span>
+        <div className="bg-success-container/20 px-4 py-2 rounded-lg border border-success-container/50 flex items-center gap-2 shadow-sm transition-all">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success"></span>
+          </span>
+          <span className="text-sm font-semibold text-success uppercase tracking-wider">Live Overview</span>
         </div>
       </header>
 
