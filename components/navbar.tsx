@@ -9,8 +9,10 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
+  const helpRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -19,6 +21,9 @@ export default function Navbar() {
       }
       if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
         setIsNotificationsOpen(false);
+      }
+      if (helpRef.current && !helpRef.current.contains(event.target as Node)) {
+        setIsHelpOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -129,9 +134,39 @@ export default function Navbar() {
             )}
           </div>
 
-          <button className="p-1 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
-            <HelpCircle size={18} />
-          </button>
+          {/* Help Dropdown */}
+          <div className="relative" ref={helpRef}>
+            <button 
+              onClick={() => setIsHelpOpen(!isHelpOpen)}
+              className="p-1 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95"
+            >
+              <HelpCircle size={18} />
+            </button>
+            
+            {isHelpOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white border border-outline-variant rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="px-4 py-2 border-b border-surface-container">
+                  <h3 className="text-sm font-semibold text-on-surface">Help & Resources</h3>
+                </div>
+                <div className="py-1">
+                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-surface-container transition-colors">
+                    Documentation
+                  </button>
+                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-surface-container transition-colors">
+                    Keyboard Shortcuts
+                  </button>
+                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-surface-container transition-colors">
+                    Community Forum
+                  </button>
+                </div>
+                <div className="border-t border-surface-container py-1">
+                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-primary font-medium hover:bg-primary-container/30 transition-colors">
+                    Contact Support
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <Link
           href="/tickets/new"
