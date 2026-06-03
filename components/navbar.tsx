@@ -2,12 +2,13 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Plus, Bell, HelpCircle, LogOut, Settings, User, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -278,7 +279,11 @@ export default function Navbar() {
               </div>
               <div className="border-t border-surface-container py-1">
                 <button 
-                  onClick={() => setIsProfileOpen(false)}
+                  onClick={() => {
+                    setIsProfileOpen(false);
+                    localStorage.removeItem('supportdesk_session');
+                    router.replace('/login');
+                  }}
                   className="w-full text-left px-4 py-2 text-sm text-error hover:bg-error-container/30 transition-colors flex items-center gap-2"
                 >
                   <LogOut size={14} />
