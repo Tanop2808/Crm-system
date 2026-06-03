@@ -86,8 +86,16 @@ export async function POST(request: Request) {
         description,
         priority: ticketPriority,
         status: Status.OPEN,
+        activityLogs: {
+          create: {
+            actor: customerName,
+            action: 'TICKET_CREATED',
+            message: 'Ticket was created and submitted.',
+          }
+        }
       },
     });
+
 
     // Create a notification for new ticket
     try {

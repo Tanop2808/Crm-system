@@ -8,7 +8,7 @@ type Params = {
   }>;
 };
 
-// GET /api/tickets/[ticketId] - Get single ticket by user-facing ticketId with all notes
+// GET /api/tickets/[ticketId] - Get single ticket by user-facing ticketId with all notes & logs
 export async function GET(request: Request, { params }: Params) {
   try {
     const { ticketId } = await params;
@@ -20,6 +20,11 @@ export async function GET(request: Request, { params }: Params) {
       },
       include: {
         notes: {
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+        activityLogs: {
           orderBy: {
             createdAt: 'asc',
           },
@@ -102,6 +107,18 @@ export async function PATCH(request: Request, { params }: Params) {
         });
 
         if (updateData.status) {
+          // Log status update activity
+          await tx.activityLog.create({
+            data: {
+              ticketId: ticket.id,
+              actor: 'Alex Support',
+              action: 'STATUS_CHANGE',
+              message: `changed status from ${ticket.status.replace('_', ' ')} to ${updateData.status.replace('_', ' ')}`,
+              prevValue: ticket.status,
+              newValue: updateData.status,
+            },
+          });
+
           await tx.notification.create({
             data: {
               title: 'Ticket Status Updated',
@@ -113,6 +130,18 @@ export async function PATCH(request: Request, { params }: Params) {
         }
 
         if (updateData.priority) {
+          // Log priority update activity
+          await tx.activityLog.create({
+            data: {
+              ticketId: ticket.id,
+              actor: 'Alex Support',
+              action: 'PRIORITY_CHANGE',
+              message: `changed priority from ${ticket.priority} to ${updateData.priority}`,
+              prevValue: ticket.priority,
+              newValue: updateData.priority,
+            },
+          });
+
           await tx.notification.create({
             data: {
               title: 'Ticket Priority Changed',
@@ -126,12 +155,24 @@ export async function PATCH(request: Request, { params }: Params) {
 
       // 2. Append Note if note is provided
       if (note && note.content && note.content.trim() !== '') {
+        const author = note.author || 'Alex Support';
+        
         await tx.note.create({
           data: {
             content: note.content.trim(),
             isInternal: note.isInternal ?? false,
-            author: note.author || 'Support Agent',
+            author,
             ticketId: ticket.id, // Links via internal cuid primary key
+          },
+        });
+
+        // Log note added activity
+        await tx.activityLog.create({
+          data: {
+            ticketId: ticket.id,
+            actor: author,
+            action: 'NOTE_ADDED',
+            message: `added a${note.isInternal ? ' private internal' : ' public'} note`,
           },
         });
 
@@ -145,11 +186,14 @@ export async function PATCH(request: Request, { params }: Params) {
         });
       }
 
-      // 3. Return the fully updated ticket with notes
+      // 3. Return the fully updated ticket with notes & logs
       return tx.ticket.findUnique({
         where: { ticketId: cleanTicketId },
         include: {
           notes: {
+            orderBy: { createdAt: 'asc' },
+          },
+          activityLogs: {
             orderBy: { createdAt: 'asc' },
           },
         },

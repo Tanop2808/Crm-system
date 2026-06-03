@@ -23,7 +23,21 @@ export interface Ticket {
   createdAt: string | Date;
   updatedAt: string | Date;
   notes?: Note[];
+  activityLogs?: ActivityLog[];
   _count?: {
     notes: number;
+    activityLogs?: number;
   };
 }
+
+export interface ActivityLog {
+  id: string;
+  ticketId: string;
+  actor: string;
+  action: string;
+  message: string;
+  prevValue: string | null;
+  newValue: string | null;
+  createdAt: string | Date;
+}
+

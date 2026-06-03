@@ -20,6 +20,7 @@ model Ticket {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   notes         Note[]
+  activityLogs  ActivityLog[]
 }
 
 model Note {
@@ -54,3 +55,16 @@ model Notification {
   link      String?  // Clickable redirect path, e.g. "/tickets/TKT-001"
   createdAt DateTime @default(now())
 }
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  ticketId    String
+  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  actor       String   @default("Agent")
+  action      String   // E.g., "TICKET_CREATED", "STATUS_CHANGE", "PRIORITY_CHANGE", "NOTE_ADDED"
+  message     String
+  prevValue   String?
+  newValue    String?
+  createdAt   DateTime @default(now())
+}
+

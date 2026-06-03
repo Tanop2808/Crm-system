@@ -2,14 +2,18 @@
 
 import { use, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Clock, User, Mail, Loader2, Send } from 'lucide-react';
+import { 
+  ArrowLeft, Clock, User, Mail, Loader2, Send, 
+  Zap, Shield, CheckCircle2, MessageSquare, PlusCircle 
+} from 'lucide-react';
 import { StatusBadge, PriorityBadge } from '@/components/status-badge';
-import { Ticket, Status, Priority, Note } from '@/types/ticket';
+import { Ticket, Status, Priority, Note, ActivityLog } from '@/types/ticket';
 import RichTextEditor from '@/components/rich-text-editor';
 
-// Extend Ticket to include notes array for the detail view
+// Extend Ticket to include notes and logs for the detail view
 interface TicketWithNotes extends Ticket {
   notes: Note[];
+  activityLogs: ActivityLog[];
 }
 
 
@@ -67,7 +71,7 @@ export default function TicketDetailPage({
       });
       if (res.ok) {
         const updated = await res.json();
-        setTicket({ ...ticket, [field]: value, updatedAt: updated.updatedAt });
+        setTicket(updated);
       }
     } catch (err) {
       console.error('Failed to update ticket', err);
@@ -136,6 +140,56 @@ export default function TicketDetailPage({
     );
   }
 
+  // Combine notes and activityLogs into a single chronological timeline
+  const timelineEvents = (() => {
+    interface TimelineEvent {
+      id: string;
+      type: 'NOTE' | 'ACTIVITY';
+      createdAt: Date;
+      content?: string;
+      isInternal?: boolean;
+      author?: string;
+      actor?: string;
+      action?: string;
+      message?: string;
+      prevValue?: string | null;
+      newValue?: string | null;
+    }
+    
+    const events: TimelineEvent[] = [];
+    
+    if (ticket.notes) {
+      ticket.notes.forEach((note) => {
+        events.push({
+          id: note.id,
+          type: 'NOTE',
+          createdAt: new Date(note.createdAt),
+          content: note.content,
+          isInternal: note.isInternal,
+          author: note.author,
+        });
+      });
+    }
+    
+    if (ticket.activityLogs) {
+      ticket.activityLogs.forEach((log) => {
+        events.push({
+          id: log.id,
+          type: 'ACTIVITY',
+          createdAt: new Date(log.createdAt),
+          actor: log.actor,
+          action: log.action,
+          message: log.message,
+          prevValue: log.prevValue,
+          newValue: log.newValue,
+        });
+      });
+    }
+    
+    // Sort oldest first (ascending)
+    return events.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  })();
+
   return (
     <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-8">
       {/* Top Bar */}
@@ -180,43 +234,95 @@ export default function TicketDetailPage({
             />
           </div>
 
-          {/* Notes Section */}
+          {/* Notes & Activity Section */}
           <div className="bg-surface-container-low border border-outline-variant rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-on-surface mb-4">Activity & Notes</h2>
+            <h2 className="text-lg font-semibold text-on-surface mb-6">Activity Timeline</h2>
             
-            {/* Note Feed */}
-            <div className="space-y-4 mb-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-              {ticket.notes.length === 0 ? (
+            {/* Timeline Feed */}
+            <div className="max-h-[500px] overflow-y-auto pr-2 custom-scrollbar mb-6">
+              {timelineEvents.length === 0 ? (
                 <div className="text-center py-8 text-on-surface-variant text-[13px]">
-                  No notes yet. Be the first to add an update.
+                  No activity logged yet. Be the first to add a note.
                 </div>
               ) : (
-                ticket.notes.map((note) => (
-                  <div
-                    key={note.id}
-                    className={`p-4 rounded-lg border ${
-                      note.isInternal
-                        ? 'bg-[#FFF9C4] border-[#FFF176]' // Yellowish for internal
-                        : 'bg-surface-container-lowest border-outline-variant' // White for public
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[13px] font-semibold text-on-surface">{note.author}</span>
-                        {note.isInternal && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider bg-warning-container text-on-warning-container px-2 py-0.5 rounded-full">
-                            Internal
-                          </span>
+                <div className="relative pl-6 border-l border-outline-variant/80 space-y-6 ml-3 mr-2 py-2">
+                  {timelineEvents.map((event) => {
+                    const isNote = event.type === 'NOTE';
+                    
+                    // Determine Marker Icon & Colors
+                    let markerBg = "bg-surface border-outline-variant text-on-surface-variant";
+                    let IconComponent = MessageSquare;
+                    
+                    if (isNote) {
+                      if (event.isInternal) {
+                        markerBg = "bg-amber-50 dark:bg-amber-950/20 border-amber-400 text-amber-600 dark:text-amber-400";
+                        IconComponent = Shield;
+                      } else {
+                        markerBg = "bg-blue-50 dark:bg-blue-950/20 border-blue-400 text-blue-600 dark:text-blue-400";
+                        IconComponent = MessageSquare;
+                      }
+                    } else {
+                      switch (event.action) {
+                        case 'TICKET_CREATED':
+                          markerBg = "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-400 text-emerald-600 dark:text-emerald-400";
+                          IconComponent = PlusCircle;
+                          break;
+                        case 'STATUS_CHANGE':
+                          markerBg = "bg-indigo-50 dark:bg-indigo-950/20 border-indigo-400 text-indigo-600 dark:text-indigo-400";
+                          IconComponent = CheckCircle2;
+                          break;
+                        case 'PRIORITY_CHANGE':
+                          markerBg = "bg-rose-50 dark:bg-rose-950/20 border-rose-400 text-rose-600 dark:text-rose-400";
+                          IconComponent = Zap;
+                          break;
+                      }
+                    }
+                    
+                    return (
+                      <div key={event.id} className="relative group animate-fade-in">
+                        {/* Timeline Connector Dot / Icon */}
+                        <div className={`absolute -left-[37px] top-1 w-7 h-7 rounded-full border-2 flex items-center justify-center z-10 shadow-sm transition-transform group-hover:scale-105 duration-200 ${markerBg}`}>
+                          <IconComponent size={14} className="stroke-[2.5]" />
+                        </div>
+                        
+                        {isNote ? (
+                          // Note Comment Block
+                          <div className={`rounded-2xl border p-4 shadow-sm transition-shadow hover:shadow ${
+                            event.isInternal 
+                              ? 'bg-amber-50/50 dark:bg-amber-950/5 border-amber-200/60 dark:border-amber-900/30' 
+                              : 'bg-surface-container-lowest border-outline-variant/60'
+                          }`}>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <span className="text-[13px] font-bold text-on-surface">{event.author}</span>
+                                {event.isInternal && (
+                                  <span className="text-[9px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full border border-amber-200/50">
+                                    Internal
+                                  </span>
+                                )}
+                              </div>
+                              <span className="text-[10px] font-medium text-on-surface-variant opacity-80">{formatDate(event.createdAt)}</span>
+                            </div>
+                            <div 
+                              className="prose prose-sm dark:prose-invert max-w-none text-[13px] leading-relaxed text-on-surface/90" 
+                              dangerouslySetInnerHTML={{ __html: event.content || '' }} 
+                            />
+                          </div>
+                        ) : (
+                          // Simple Activity Log Item
+                          <div className="flex items-center justify-between py-1.5 px-1">
+                            <p className="text-[13px] text-on-surface-variant font-medium">
+                              <span className="font-bold text-on-surface">{event.actor}</span> {event.message}
+                            </p>
+                            <span className="text-[10px] font-medium text-on-surface-variant opacity-70 flex-shrink-0 ml-4">
+                              {formatDate(event.createdAt)}
+                            </span>
+                          </div>
                         )}
                       </div>
-                      <span className="text-[11px] text-on-surface-variant">{formatDate(note.createdAt)}</span>
-                    </div>
-                    <div 
-                      className="prose prose-sm dark:prose-invert max-w-none mt-2" 
-                      dangerouslySetInnerHTML={{ __html: note.content }} 
-                    />
-                  </div>
-                ))
+                    );
+                  })}
+                </div>
               )}
             </div>
 
