@@ -88,8 +88,25 @@ Provides support managers and agents with an automated, vertical audit trail tra
 
 ---
 
-## 5. Compilation & Build Verification
+## 5. Feature 5: Image Drag & Drop / Paste Support
+
+### Purpose
+Allows agents and customers to easily insert screenshots and images directly into the ticket description field by dragging/dropping or copying/pasting them.
+
+### Implementation Details:
+*   **Dependency Integration (`package.json`)**: Installed `@tiptap/extension-image@3.25.0` to render dynamic image nodes inside the editor.
+*   **Dynamic Image Conversions (`components/rich-text-editor.tsx`)**:
+    *   Wired custom `handleDrop` and `handlePaste` interceptors inside Tiptap's `editorProps`.
+    *   Whenever image files are detected, the default browser action is prevented.
+    *   A `FileReader` reads the image asynchronously and encodes it into a compressed **Base64 Data URL**.
+    *   Programmatically inserts the data URL inline as an image node at the current cursor selection: `editor.commands.setImage({ src: dataUrl })`.
+*   **Responsive Layout Design (`app/globals.css`)**:
+    *   Configured class rules under `.ProseMirror img` and `.prose img` to ensure images are scaled responsively (`max-width: 100%`, `height: auto`), with elegant rounded corners, borders, and margins.
+
+---
+
+## 6. Compilation & Build Verification
 *   **Database Synchronized**: Database schema pushed successfully using `npx prisma db push`.
-*   **TypeScript/Next.js Build**: Ran `npm run build` which successfully compiled the entire codebase (including the newly added database relations and vertical timeline components) with 0 errors.
+*   **TypeScript/Next.js Build**: Ran `npm run build` which successfully compiled the entire codebase (including the newly added database relations, timeline components, and Tiptap Image extension) with 0 errors.
 
 

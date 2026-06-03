@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import Image from '@tiptap/extension-image'
 import { Bold, Italic, Strikethrough, Code, List, ListOrdered } from 'lucide-react'
 
 interface RichTextEditorProps {
@@ -60,10 +61,29 @@ const MenuBar = ({ editor }: { editor: any }) => {
   )
 }
 
+const handleImageUpload = (view: any, file: File) => {
+  const reader = new FileReader();
+  reader.onload = (readerEvent) => {
+    const dataUrl = readerEvent.target?.result as string;
+    if (dataUrl) {
+      const { schema } = view.state;
+      const node = schema.nodes.image.create({ src: dataUrl });
+      const transaction = view.state.tr.replaceSelectionWith(node);
+      view.dispatch(transaction);
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
 export default function RichTextEditor({ content, onChange, error }: RichTextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Image.configure({
+        HTMLAttributes: {
+          class: 'rounded-md max-w-full h-auto border border-outline-variant my-2 shadow-sm cursor-default select-none',
+        },
+      }),
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -73,6 +93,30 @@ export default function RichTextEditor({ content, onChange, error }: RichTextEdi
     editorProps: {
       attributes: {
         class: 'prose prose-sm dark:prose-invert max-w-none min-h-[120px] focus:outline-none p-4 text-[14px] text-on-surface',
+      },
+      handleDrop(view, event, slice, moved) {
+        if (!moved && event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+          const files = Array.from(event.dataTransfer.files);
+          const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+          if (imageFiles.length > 0) {
+            event.preventDefault();
+            imageFiles.forEach((file) => handleImageUpload(view, file));
+            return true;
+          }
+        }
+        return false;
+      },
+      handlePaste(view, event, slice) {
+        if (event.clipboardData && event.clipboardData.files && event.clipboardData.files.length > 0) {
+          const files = Array.from(event.clipboardData.files);
+          const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+          if (imageFiles.length > 0) {
+            event.preventDefault();
+            imageFiles.forEach((file) => handleImageUpload(view, file));
+            return true;
+          }
+        }
+        return false;
       },
     },
   })
