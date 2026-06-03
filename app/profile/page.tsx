@@ -14,7 +14,7 @@ export default function ProfilePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Left Column: Avatar & Quick Info */}
         <div className="col-span-1">
-          <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col items-center text-center">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm flex flex-col items-center text-center">
             <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-outline-variant mb-4">
               <img
                 alt="User profile"
@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
         {/* Right Column: Settings Form */}
         <div className="col-span-1 md:col-span-2 space-y-6">
-          <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low">
               <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Personal Information</h3>
             </div>
@@ -65,7 +65,7 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low">
               <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Security</h3>
             </div>

@@ -1,9 +1,16 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import { Bell, Shield, Palette, Layout, Smartphone } from 'lucide-react';
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('general');
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getTabClass = (tab: string) => {
     return activeTab === tab 
@@ -45,7 +52,7 @@ export default function SettingsPage() {
           {activeTab === 'general' && (
             <>
               {/* Workspace Settings */}
-              <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
               <Layout size={16} className="text-secondary" />
               <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Workspace Preferences</h3>
@@ -82,7 +89,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Device Management */}
-          <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
               <Smartphone size={16} className="text-secondary" />
               <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Active Sessions</h3>
@@ -111,7 +118,7 @@ export default function SettingsPage() {
           )}
 
           {activeTab === 'notifications' && (
-            <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
                 <Bell size={16} className="text-secondary" />
                 <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Notifications</h3>
@@ -139,7 +146,7 @@ export default function SettingsPage() {
           )}
 
           {activeTab === 'appearance' && (
-            <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
                 <Palette size={16} className="text-secondary" />
                 <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Appearance Settings</h3>
@@ -150,10 +157,14 @@ export default function SettingsPage() {
                     <h4 className="text-[14px] font-semibold text-on-surface">Theme</h4>
                     <p className="text-[13px] text-on-surface-variant">Select your preferred color theme.</p>
                   </div>
-                  <select className="h-9 px-3 border border-outline-variant rounded bg-surface text-[13px] focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    <option>System Default</option>
-                    <option>Light Mode</option>
-                    <option>Dark Mode</option>
+                  <select 
+                    className="h-9 px-3 border border-outline-variant rounded bg-surface text-[13px] focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    value={mounted ? theme : 'system'}
+                    onChange={(e) => setTheme(e.target.value)}
+                  >
+                    <option value="system">System Default</option>
+                    <option value="light">Light Mode</option>
+                    <option value="dark">Dark Mode</option>
                   </select>
                 </div>
               </div>
@@ -161,7 +172,7 @@ export default function SettingsPage() {
           )}
 
           {activeTab === 'privacy' && (
-            <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
                 <Shield size={16} className="text-secondary" />
                 <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Privacy & Security</h3>

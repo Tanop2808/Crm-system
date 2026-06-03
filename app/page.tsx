@@ -92,7 +92,7 @@ export default function DashboardPage() {
           <input
             value={search}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-full pl-8 pr-8 py-2 bg-white border border-outline-variant rounded text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+            className="w-full pl-8 pr-8 py-2 bg-surface-container-lowest border border-outline-variant rounded text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
             placeholder="Search tickets..."
             type="text"
           />
@@ -111,7 +111,7 @@ export default function DashboardPage() {
               onClick={() => handleFilterChange(f.value)}
               className={`px-4 py-1 text-xs font-semibold rounded-md transition-all ${
                 activeFilter === f.value
-                  ? 'bg-white text-primary shadow-sm'
+                  ? 'bg-surface-container-lowest text-primary shadow-sm'
                   : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
@@ -122,7 +122,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Table Container */}
-      <div className="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -221,7 +221,7 @@ export default function DashboardPage() {
 
       {/* Bento Metric Cards */}
       <section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 border border-outline-variant rounded-xl shadow-sm">
+        <div className="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Resolution Rate</span>
             <TrendingUp size={18} className="text-primary-container" />
@@ -233,7 +233,7 @@ export default function DashboardPage() {
           <p className="text-[13px] text-on-surface-variant mt-1">Based on current ticket data</p>
         </div>
 
-        <div className="bg-white p-6 border border-outline-variant rounded-xl shadow-sm">
+        <div className="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Open Tickets</span>
             <Clock size={18} className="text-tertiary-container" />
@@ -245,7 +245,7 @@ export default function DashboardPage() {
           <p className="text-[13px] text-on-surface-variant mt-1">Awaiting response or resolution</p>
         </div>
 
-        <div className="bg-white p-6 border border-outline-variant rounded-xl shadow-sm">
+        <div className="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">CSAT Score</span>
             <Star size={18} className="text-secondary fill-secondary" />

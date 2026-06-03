@@ -86,7 +86,7 @@ export default function ReportsPage() {
 
       {/* Top Metrics Row */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <div className="bg-white p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Total Volume</span>
             <Target size={18} className="text-secondary" />
@@ -97,7 +97,7 @@ export default function ReportsPage() {
           <p className="text-[13px] text-on-surface-variant mt-2">All time submitted tickets</p>
         </div>
 
-        <div className="bg-white p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Resolution Rate</span>
             <TrendingUp size={18} className="text-primary" />
@@ -113,7 +113,7 @@ export default function ReportsPage() {
           </div>
         </div>
 
-        <div className="bg-white p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Urgent Issues</span>
             <AlertTriangle size={18} className="text-error" />
@@ -124,7 +124,7 @@ export default function ReportsPage() {
           <p className="text-[13px] text-on-surface-variant mt-2">Requiring immediate attention</p>
         </div>
 
-        <div className="bg-white p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[11px] font-semibold text-secondary uppercase tracking-wider">Active Workload</span>
             <Clock size={18} className="text-tertiary" />
@@ -152,7 +152,7 @@ export default function ReportsPage() {
                 </span>
                 <span className="font-semibold text-on-surface">{data.byStatus.OPEN}</span>
               </div>
-              <div className="w-full bg-white h-2 rounded-full overflow-hidden border border-outline-variant">
+              <div className="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant">
                 <div 
                   className="bg-error-container h-full" 
                   style={{ width: `${(data.byStatus.OPEN / Math.max(data.totalTickets, 1)) * 100}%` }} 
@@ -168,7 +168,7 @@ export default function ReportsPage() {
                 </span>
                 <span className="font-semibold text-on-surface">{data.byStatus.IN_PROGRESS}</span>
               </div>
-              <div className="w-full bg-white h-2 rounded-full overflow-hidden border border-outline-variant">
+              <div className="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant">
                 <div 
                   className="bg-secondary-container h-full" 
                   style={{ width: `${(data.byStatus.IN_PROGRESS / Math.max(data.totalTickets, 1)) * 100}%` }} 
@@ -184,7 +184,7 @@ export default function ReportsPage() {
                 </span>
                 <span className="font-semibold text-on-surface">{data.byStatus.CLOSED}</span>
               </div>
-              <div className="w-full bg-white h-2 rounded-full overflow-hidden border border-outline-variant">
+              <div className="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant">
                 <div 
                   className="bg-surface-container-highest h-full" 
                   style={{ width: `${(data.byStatus.CLOSED / Math.max(data.totalTickets, 1)) * 100}%` }} 
@@ -199,7 +199,7 @@ export default function ReportsPage() {
           <h2 className="text-lg font-semibold text-on-surface mb-6">Priority Distribution</h2>
           
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white p-4 rounded-lg border border-outline-variant flex flex-col justify-between h-24">
+            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant flex flex-col justify-between h-24">
               <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Low</span>
               <span className="text-2xl font-semibold text-on-surface">{data.byPriority.LOW}</span>
             </div>

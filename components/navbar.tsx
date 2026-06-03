@@ -31,7 +31,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="sticky top-0 z-50 flex justify-between items-center px-6 w-full bg-white h-[56px] border-b border-outline-variant shadow-sm">
+    <nav className="sticky top-0 z-50 flex justify-between items-center px-6 w-full bg-surface-container-lowest h-[56px] border-b border-outline-variant shadow-sm">
       <div className="flex items-center gap-8">
         <Link href="/" className="text-lg font-bold text-primary select-none hover:opacity-90 tracking-tight">
           SupportDesk
@@ -93,7 +93,7 @@ export default function Navbar() {
             </button>
 
             {isNotificationsOpen && (
-              <div className="absolute right-0 mt-2 w-72 bg-white border border-outline-variant rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute right-0 mt-2 w-72 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="px-4 py-2 border-b border-surface-container flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-on-surface">Notifications</h3>
                   <button className="text-xs text-primary hover:underline">Mark all as read</button>
@@ -144,7 +144,7 @@ export default function Navbar() {
             </button>
             
             {isHelpOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white border border-outline-variant rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute right-0 mt-2 w-56 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="px-4 py-2 border-b border-surface-container">
                   <h3 className="text-sm font-semibold text-on-surface">Help & Resources</h3>
                 </div>
@@ -190,7 +190,7 @@ export default function Navbar() {
           </button>
 
           {isProfileOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-outline-variant rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute right-0 mt-2 w-48 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
               <div className="px-4 py-3 border-b border-surface-container">
                 <p className="text-sm font-semibold text-on-surface">Alex Support</p>
                 <p className="text-xs text-on-surface-variant truncate">alex@supportdesk.crm</p>

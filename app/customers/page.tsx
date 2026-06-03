@@ -60,7 +60,7 @@ export default function CustomersPage() {
           <p className="font-semibold">{error}</p>
         </div>
       ) : (
-        <div className="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>

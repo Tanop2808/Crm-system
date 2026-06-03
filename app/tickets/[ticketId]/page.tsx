@@ -161,7 +161,7 @@ export default function TicketDetailPage({
         {/* Left Column: Ticket Details & Notes */}
         <div className="lg:col-span-2 space-y-6">
           {/* Main Ticket Card */}
-          <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h1 className="text-2xl font-semibold text-on-surface mb-2 tracking-tight">{ticket.subject}</h1>
@@ -199,7 +199,7 @@ export default function TicketDetailPage({
                     className={`p-4 rounded-lg border ${
                       note.isInternal
                         ? 'bg-[#FFF9C4] border-[#FFF176]' // Yellowish for internal
-                        : 'bg-white border-outline-variant' // White for public
+                        : 'bg-surface-container-lowest border-outline-variant' // White for public
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
@@ -220,7 +220,7 @@ export default function TicketDetailPage({
             </div>
 
             {/* Add Note Form */}
-            <form onSubmit={handleAddNote} className="bg-white border border-outline-variant rounded-lg p-4">
+            <form onSubmit={handleAddNote} className="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
               <textarea
                 rows={3}
                 placeholder="Type your note here..."
@@ -254,7 +254,7 @@ export default function TicketDetailPage({
         {/* Right Column: Sidebar */}
         <div className="space-y-6">
           {/* Action Card */}
-          <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
             <h3 className="text-[13px] font-semibold text-secondary uppercase tracking-wider mb-4">Manage Ticket</h3>
             
             <div className="space-y-4">
@@ -289,7 +289,7 @@ export default function TicketDetailPage({
           </div>
 
           {/* Customer Details Card */}
-          <div className="bg-white border border-outline-variant rounded-xl p-6 shadow-sm">
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
             <h3 className="text-[13px] font-semibold text-secondary uppercase tracking-wider mb-4">Customer Info</h3>
             
             <div className="space-y-4">

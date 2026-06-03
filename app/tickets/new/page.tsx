@@ -67,7 +67,7 @@ export default function NewTicketPage() {
 
   const fieldClass = (field: string) =>
     `w-full h-10 px-4 border rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-outline ${
-      errors[field] ? 'border-error bg-error-container/10' : 'border-outline-variant bg-white'
+      errors[field] ? 'border-error bg-error-container/10' : 'border-outline-variant bg-surface-container-lowest'
     }`;
 
   return (
@@ -92,7 +92,7 @@ export default function NewTicketPage() {
       </div>
 
       {/* Form Card */}
-      <div className="w-full max-w-[640px] bg-white border border-outline-variant rounded-xl p-8 shadow-sm">
+      <div className="w-full max-w-[640px] bg-surface-container-lowest border border-outline-variant rounded-xl p-8 shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Customer Name */}
           <div className="flex flex-col gap-1">
@@ -149,7 +149,7 @@ export default function NewTicketPage() {
             </label>
             <select
               id="priority"
-              className="w-full h-10 px-4 border border-outline-variant rounded-md bg-white text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+              className="w-full h-10 px-4 border border-outline-variant rounded-md bg-surface-container-lowest text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
               value={form.priority}
               onChange={(e) => setForm({ ...form, priority: e.target.value })}
             >
@@ -169,7 +169,7 @@ export default function NewTicketPage() {
               rows={5}
               placeholder="Provide as much detail as possible..."
               className={`w-full px-4 py-2 border rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-outline resize-none ${
-                errors.description ? 'border-error bg-error-container/10' : 'border-outline-variant bg-white'
+                errors.description ? 'border-error bg-error-container/10' : 'border-outline-variant bg-surface-container-lowest'
               }`}
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
