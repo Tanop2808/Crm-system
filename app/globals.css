@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --theme-primary: #3525cd;
@@ -153,3 +155,16 @@ body {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Rich Text Editor - Force theme-compliant text color */
+.ProseMirror,
+.ProseMirror p,
+.ProseMirror li,
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror span {
+  color: var(--theme-on-surface) !important;
+}
+
+

@@ -72,7 +72,7 @@ export default function RichTextEditor({ content, onChange, error }: RichTextEdi
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-sm dark:prose-invert max-w-none min-h-[120px] focus:outline-none p-4 text-[14px]',
+        class: 'prose prose-sm dark:prose-invert max-w-none min-h-[120px] focus:outline-none p-4 text-[14px] text-on-surface',
       },
     },
   })
