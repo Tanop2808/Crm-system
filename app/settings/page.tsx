@@ -1,6 +1,16 @@
+"use client";
+import { useState } from 'react';
 import { Bell, Shield, Palette, Layout, Smartphone } from 'lucide-react';
 
 export default function SettingsPage() {
+  const [activeTab, setActiveTab] = useState('general');
+
+  const getTabClass = (tab: string) => {
+    return activeTab === tab 
+      ? "w-full text-left px-4 py-2 text-sm font-semibold rounded-md bg-surface-container text-primary flex items-center gap-2"
+      : "w-full text-left px-4 py-2 text-sm font-medium rounded-md text-on-surface-variant hover:bg-surface-container/50 transition-colors flex items-center gap-2";
+  };
+
   return (
     <main className="flex-grow w-full max-w-4xl mx-auto px-6 py-8">
       {/* Page Header */}
@@ -15,16 +25,16 @@ export default function SettingsPage() {
         {/* Left Column: Navigation Sidebar */}
         <div className="col-span-1 hidden md:block">
           <nav className="flex flex-col gap-2 sticky top-24">
-            <button className="text-left px-4 py-2 text-sm font-semibold rounded-md bg-surface-container text-primary flex items-center gap-2">
+            <button onClick={() => setActiveTab('general')} className={getTabClass('general')}>
               <SettingsIcon size={16} /> General
             </button>
-            <button className="text-left px-4 py-2 text-sm font-medium rounded-md text-on-surface-variant hover:bg-surface-container/50 transition-colors flex items-center gap-2">
+            <button onClick={() => setActiveTab('notifications')} className={getTabClass('notifications')}>
               <Bell size={16} /> Notifications
             </button>
-            <button className="text-left px-4 py-2 text-sm font-medium rounded-md text-on-surface-variant hover:bg-surface-container/50 transition-colors flex items-center gap-2">
+            <button onClick={() => setActiveTab('appearance')} className={getTabClass('appearance')}>
               <Palette size={16} /> Appearance
             </button>
-            <button className="text-left px-4 py-2 text-sm font-medium rounded-md text-on-surface-variant hover:bg-surface-container/50 transition-colors flex items-center gap-2">
+            <button onClick={() => setActiveTab('privacy')} className={getTabClass('privacy')}>
               <Shield size={16} /> Privacy
             </button>
           </nav>
@@ -32,8 +42,10 @@ export default function SettingsPage() {
 
         {/* Right Column: Settings Content */}
         <div className="col-span-1 md:col-span-3 space-y-6">
-          {/* Workspace Settings */}
-          <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+          {activeTab === 'general' && (
+            <>
+              {/* Workspace Settings */}
+              <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
             <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
               <Layout size={16} className="text-secondary" />
               <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Workspace Preferences</h3>
@@ -95,7 +107,88 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
+            </>
+          )}
 
+          {activeTab === 'notifications' && (
+            <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
+                <Bell size={16} className="text-secondary" />
+                <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Notifications</h3>
+              </div>
+              <div className="p-6 space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-[14px] font-semibold text-on-surface">Email Notifications</h4>
+                    <p className="text-[13px] text-on-surface-variant">Receive daily summaries and critical alerts via email.</p>
+                  </div>
+                  <input type="checkbox" className="h-5 w-5 rounded border-outline-variant text-primary focus:ring-primary" defaultChecked />
+                </div>
+                
+                <hr className="border-outline-variant" />
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-[14px] font-semibold text-on-surface">Push Notifications</h4>
+                    <p className="text-[13px] text-on-surface-variant">Get real-time alerts in your browser.</p>
+                  </div>
+                  <input type="checkbox" className="h-5 w-5 rounded border-outline-variant text-primary focus:ring-primary" defaultChecked />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'appearance' && (
+            <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
+                <Palette size={16} className="text-secondary" />
+                <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Appearance Settings</h3>
+              </div>
+              <div className="p-6 space-y-6">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="text-[14px] font-semibold text-on-surface">Theme</h4>
+                    <p className="text-[13px] text-on-surface-variant">Select your preferred color theme.</p>
+                  </div>
+                  <select className="h-9 px-3 border border-outline-variant rounded bg-surface text-[13px] focus:outline-none focus:ring-2 focus:ring-primary/20">
+                    <option>System Default</option>
+                    <option>Light Mode</option>
+                    <option>Dark Mode</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'privacy' && (
+            <div className="bg-white border border-outline-variant rounded-xl shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center gap-2">
+                <Shield size={16} className="text-secondary" />
+                <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">Privacy & Security</h3>
+              </div>
+              <div className="p-6 space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-[14px] font-semibold text-on-surface">Data Sharing</h4>
+                    <p className="text-[13px] text-on-surface-variant">Allow anonymous usage data to be shared to improve the product.</p>
+                  </div>
+                  <input type="checkbox" className="h-5 w-5 rounded border-outline-variant text-primary focus:ring-primary" />
+                </div>
+
+                <hr className="border-outline-variant" />
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-[14px] font-semibold text-error">Delete Account</h4>
+                    <p className="text-[13px] text-on-surface-variant">Permanently remove your account and all associated data.</p>
+                  </div>
+                  <button className="text-[13px] font-semibold text-white bg-error hover:bg-error/90 px-4 py-2 rounded transition-colors">
+                    Delete Account
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </main>
