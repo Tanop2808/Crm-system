@@ -26,7 +26,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col bg-surface text-on-surface antialiased`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <Navbar />
           <div className="flex-grow">
           {children}
