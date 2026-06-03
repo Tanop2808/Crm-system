@@ -19,7 +19,8 @@ Your job is to help support agents by drafting polite, professional responses to
 Keep your answers concise, empathetic, and directly useful to a busy support agent.
 
 You have access to tools to view and list support tickets in the database. When the user asks about specific tickets or ticket statuses, USE these tools to fetch the live data and answer their question. Always present the live ticket information clearly.`,
-      stopWhen: stepCountIs(5),
+      stopWhen: stepCountIs(2),
+      timeout: 8000,
       tools: {
         listTickets: tool({
           description: 'List support tickets in the database. Returns ticket ID, subject, status, priority, and customer details. You can filter by status or priority.',

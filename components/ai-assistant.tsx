@@ -9,8 +9,10 @@ import { MessageSquare, X, Send, Bot, User, Loader2 } from 'lucide-react';
 export default function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat' }),
+    onError: (err) => setErrorMsg(err instanceof Error ? err.message : 'Something went wrong'),
   });
   const isLoading = status === 'streaming' || status === 'submitted';
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -117,6 +119,14 @@ export default function AIAssistant() {
                     </div>
                   </div>
                 ))
+              )}
+              {errorMsg && (
+                <div className="flex justify-center w-full">
+                  <div className="px-3 py-2 rounded-xl bg-error-container text-error text-xs text-center max-w-full">
+                    {errorMsg}
+                    <button onClick={() => setErrorMsg(null)} className="ml-2 underline">Dismiss</button>
+                  </div>
+                </div>
               )}
               {isLoading && messages.length > 0 && messages[messages.length - 1].role === 'user' && (
                 <div className="flex justify-start w-full">
