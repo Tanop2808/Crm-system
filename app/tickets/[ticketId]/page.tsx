@@ -173,6 +173,9 @@ export default function TicketDetailPage({
     
     if (ticket.activityLogs) {
       ticket.activityLogs.forEach((log) => {
+        // Skip NOTE_ADDED logs to avoid duplication since notes are rendered as detailed cards
+        if (log.action === 'NOTE_ADDED') return;
+
         events.push({
           id: log.id,
           type: 'ACTIVITY',
