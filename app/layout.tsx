@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/navbar';
+import AIAssistant from '@/components/ai-assistant';
 import { ThemeProvider } from '@/components/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -43,6 +44,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <AIAssistant />
         </ThemeProvider>
       </body>
     </html>

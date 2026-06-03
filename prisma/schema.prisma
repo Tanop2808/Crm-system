@@ -44,3 +44,13 @@ enum Priority {
   HIGH
   URGENT
 }
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String   // "TICKET_CREATED", "NOTE_ADDED", "STATUS_UPDATED", "PRIORITY_UPDATED", "SYSTEM"
+  isRead    Boolean  @default(false)
+  link      String?  // Clickable redirect path, e.g. "/tickets/TKT-001"
+  createdAt DateTime @default(now())
+}

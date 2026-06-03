@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Loader2 } from 'lucide-react';
+import RichTextEditor from '@/components/rich-text-editor';
 
 const PRIORITY_OPTIONS = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'] as const;
 
@@ -164,15 +165,10 @@ export default function NewTicketPage() {
             <label className="text-[13px] font-medium text-on-surface-variant" htmlFor="description">
               Description
             </label>
-            <textarea
-              id="description"
-              rows={5}
-              placeholder="Provide as much detail as possible..."
-              className={`w-full px-4 py-2 border rounded-md text-[14px] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-outline resize-none ${
-                errors.description ? 'border-error bg-error-container/10' : 'border-outline-variant bg-surface-container-lowest'
-              }`}
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            <RichTextEditor
+              content={form.description}
+              onChange={(content) => setForm({ ...form, description: content })}
+              error={!!errors.description}
             />
             {errors.description && <p className="text-[12px] text-error">{errors.description}</p>}
           </div>

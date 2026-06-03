@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { BarChart3, TrendingUp, AlertTriangle, CheckCircle, Clock, Loader2, Target, ShieldAlert } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 interface ReportData {
   totalTickets: number;
@@ -64,6 +65,19 @@ export default function ReportsPage() {
       </main>
     );
   }
+
+  const statusData = data ? [
+    { name: 'Open', value: data.byStatus.OPEN, color: 'var(--color-error)' },
+    { name: 'In Progress', value: data.byStatus.IN_PROGRESS, color: 'var(--color-secondary)' },
+    { name: 'Closed', value: data.byStatus.CLOSED, color: 'var(--color-outline)' },
+  ] : [];
+
+  const priorityData = data ? [
+    { name: 'Low', value: data.byPriority.LOW, color: 'var(--color-outline)' },
+    { name: 'Medium', value: data.byPriority.MEDIUM, color: 'var(--color-secondary)' },
+    { name: 'High', value: data.byPriority.HIGH, color: 'var(--color-tertiary)' },
+    { name: 'Urgent', value: data.byPriority.URGENT, color: 'var(--color-error)' },
+  ] : [];
 
   return (
     <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-8">
@@ -142,83 +156,60 @@ export default function ReportsPage() {
         {/* Status Breakdown */}
         <div className="bg-surface-container-low border border-outline-variant rounded-xl p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-on-surface mb-6">Status Breakdown</h2>
-          
-          <div className="space-y-5">
-            <div>
-              <div className="flex justify-between text-sm mb-1.5">
-                <span className="font-medium text-on-surface flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-error-container border border-error"></span>
-                  Open
-                </span>
-                <span className="font-semibold text-on-surface">{data.byStatus.OPEN}</span>
-              </div>
-              <div className="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant">
-                <div 
-                  className="bg-error-container h-full" 
-                  style={{ width: `${(data.byStatus.OPEN / Math.max(data.totalTickets, 1)) * 100}%` }} 
+          <div className="h-[240px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={statusData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {statusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <RechartsTooltip 
+                  contentStyle={{ backgroundColor: 'var(--color-surface-container)', borderRadius: '8px', border: '1px solid var(--color-outline-variant)' }}
+                  itemStyle={{ color: 'var(--color-on-surface)' }}
                 />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex justify-center gap-4 mt-2">
+            {statusData.map((entry) => (
+              <div key={entry.name} className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                <span className="text-xs text-on-surface-variant font-medium">{entry.name} ({entry.value})</span>
               </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between text-sm mb-1.5">
-                <span className="font-medium text-on-surface flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-secondary-container border border-secondary"></span>
-                  In Progress
-                </span>
-                <span className="font-semibold text-on-surface">{data.byStatus.IN_PROGRESS}</span>
-              </div>
-              <div className="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant">
-                <div 
-                  className="bg-secondary-container h-full" 
-                  style={{ width: `${(data.byStatus.IN_PROGRESS / Math.max(data.totalTickets, 1)) * 100}%` }} 
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between text-sm mb-1.5">
-                <span className="font-medium text-on-surface flex items-center gap-2">
-                  <CheckCircle size={12} className="text-on-surface-variant" />
-                  Closed
-                </span>
-                <span className="font-semibold text-on-surface">{data.byStatus.CLOSED}</span>
-              </div>
-              <div className="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden border border-outline-variant">
-                <div 
-                  className="bg-surface-container-highest h-full" 
-                  style={{ width: `${(data.byStatus.CLOSED / Math.max(data.totalTickets, 1)) * 100}%` }} 
-                />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
         {/* Priority Breakdown */}
         <div className="bg-surface-container-low border border-outline-variant rounded-xl p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-on-surface mb-6">Priority Distribution</h2>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant flex flex-col justify-between h-24">
-              <span className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Low</span>
-              <span className="text-2xl font-semibold text-on-surface">{data.byPriority.LOW}</span>
-            </div>
-            
-            <div className="bg-secondary-container/20 p-4 rounded-lg border border-secondary-container flex flex-col justify-between h-24">
-              <span className="text-xs font-semibold text-on-secondary-container uppercase tracking-wider">Medium</span>
-              <span className="text-2xl font-semibold text-on-secondary-container">{data.byPriority.MEDIUM}</span>
-            </div>
-
-            <div className="bg-tertiary-container/30 p-4 rounded-lg border border-tertiary-container flex flex-col justify-between h-24">
-              <span className="text-xs font-semibold text-on-tertiary-container uppercase tracking-wider">High</span>
-              <span className="text-2xl font-semibold text-on-tertiary-container">{data.byPriority.HIGH}</span>
-            </div>
-
-            <div className="bg-error-container/20 p-4 rounded-lg border border-error-container flex flex-col justify-between h-24 relative overflow-hidden">
-              <ShieldAlert size={64} className="absolute -right-4 -bottom-4 text-error opacity-10" />
-              <span className="text-xs font-semibold text-error uppercase tracking-wider z-10">Urgent</span>
-              <span className="text-2xl font-semibold text-error z-10">{data.byPriority.URGENT}</span>
-            </div>
+          <div className="h-[240px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={priorityData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-outline-variant)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--color-on-surface-variant)' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: 'var(--color-on-surface-variant)' }} />
+                <RechartsTooltip 
+                  cursor={{ fill: 'var(--color-surface-container)' }}
+                  contentStyle={{ backgroundColor: 'var(--color-surface-container-lowest)', borderRadius: '8px', border: '1px solid var(--color-outline-variant)' }}
+                />
+                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  {priorityData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
 

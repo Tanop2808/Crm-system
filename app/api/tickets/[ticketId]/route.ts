@@ -100,6 +100,28 @@ export async function PATCH(request: Request, { params }: Params) {
           where: { ticketId: cleanTicketId },
           data: updateData,
         });
+
+        if (updateData.status) {
+          await tx.notification.create({
+            data: {
+              title: 'Ticket Status Updated',
+              message: `Ticket ${cleanTicketId} status changed to ${updateData.status.replace('_', ' ')}.`,
+              type: 'STATUS_UPDATED',
+              link: `/tickets/${cleanTicketId}`,
+            },
+          });
+        }
+
+        if (updateData.priority) {
+          await tx.notification.create({
+            data: {
+              title: 'Ticket Priority Changed',
+              message: `Ticket ${cleanTicketId} priority set to ${updateData.priority}.`,
+              type: 'PRIORITY_UPDATED',
+              link: `/tickets/${cleanTicketId}`,
+            },
+          });
+        }
       }
 
       // 2. Append Note if note is provided
@@ -110,6 +132,15 @@ export async function PATCH(request: Request, { params }: Params) {
             isInternal: note.isInternal ?? false,
             author: note.author || 'Support Agent',
             ticketId: ticket.id, // Links via internal cuid primary key
+          },
+        });
+
+        await tx.notification.create({
+          data: {
+            title: 'New Note Added',
+            message: `A new ${note.isInternal ? 'internal ' : ''}note was added to ticket ${cleanTicketId}.`,
+            type: 'NOTE_ADDED',
+            link: `/tickets/${cleanTicketId}`,
           },
         });
       }

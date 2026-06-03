@@ -3,11 +3,13 @@ export type Priority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
 
 export interface Note {
   id: string;
-  noteText: string;
+  content: string;
+  isInternal: boolean;
   author: string;
   createdAt: string | Date;
   ticketId: string;
 }
+
 
 export interface Ticket {
   id: string;

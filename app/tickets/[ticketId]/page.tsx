@@ -4,18 +4,14 @@ import { use, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Clock, User, Mail, Loader2, Send } from 'lucide-react';
 import { StatusBadge, PriorityBadge } from '@/components/status-badge';
-import { Ticket, Status, Priority } from '@/types/ticket';
+import { Ticket, Status, Priority, Note } from '@/types/ticket';
+import RichTextEditor from '@/components/rich-text-editor';
 
 // Extend Ticket to include notes array for the detail view
 interface TicketWithNotes extends Ticket {
-  notes: {
-    id: string;
-    content: string;
-    isInternal: boolean;
-    createdAt: string;
-    author: string;
-  }[];
+  notes: Note[];
 }
+
 
 const STATUS_OPTIONS: Status[] = ['OPEN', 'IN_PROGRESS', 'CLOSED'];
 const PRIORITY_OPTIONS: Priority[] = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'];
@@ -109,11 +105,12 @@ export default function TicketDetailPage({
     }
   };
 
-  const formatDate = (dateStr: string) => {
+  const formatDate = (dateStr: string | Date) => {
     const d = new Date(dateStr);
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
       ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
   };
+
 
   if (loading) {
     return (
@@ -177,9 +174,10 @@ export default function TicketDetailPage({
             
             <hr className="border-outline-variant my-4" />
             
-            <div className="prose prose-sm max-w-none text-on-surface-variant">
-              <p className="whitespace-pre-wrap leading-relaxed">{ticket.description}</p>
-            </div>
+            <div 
+              className="prose prose-sm dark:prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: ticket.description }} 
+            />
           </div>
 
           {/* Notes Section */}
@@ -213,22 +211,22 @@ export default function TicketDetailPage({
                       </div>
                       <span className="text-[11px] text-on-surface-variant">{formatDate(note.createdAt)}</span>
                     </div>
-                    <p className="text-[14px] text-on-surface-variant whitespace-pre-wrap">{note.content}</p>
+                    <div 
+                      className="prose prose-sm dark:prose-invert max-w-none mt-2" 
+                      dangerouslySetInnerHTML={{ __html: note.content }} 
+                    />
                   </div>
                 ))
               )}
             </div>
 
             {/* Add Note Form */}
-            <form onSubmit={handleAddNote} className="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
-              <textarea
-                rows={3}
-                placeholder="Type your note here..."
-                className="w-full text-[14px] focus:outline-none resize-none placeholder:text-outline bg-transparent"
-                value={newNote}
-                onChange={(e) => setNewNote(e.target.value)}
+            <form onSubmit={handleAddNote} className="mt-4">
+              <RichTextEditor
+                content={newNote}
+                onChange={(content) => setNewNote(content)}
               />
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-outline-variant">
+              <div className="flex items-center justify-between mt-3 bg-surface-container-lowest p-3 border border-outline-variant rounded-lg">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"

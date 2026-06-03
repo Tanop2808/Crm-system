@@ -1,20 +1,93 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Plus, Bell, HelpCircle, LogOut, Settings, User } from 'lucide-react';
+import { Plus, Bell, HelpCircle, LogOut, Settings, User, Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
-  const helpRef = useRef<HTMLDivElement>(null);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  interface AppNotification {
+    id: string;
+    title: string;
+    message: string;
+    type: string;
+    isRead: boolean;
+    link: string | null;
+    createdAt: string;
+  }
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const res = await fetch('/api/notifications');
+      if (res.ok) {
+        const data = await res.json();
+        setNotifications(data.notifications);
+        setUnreadCount(data.unreadCount);
+      }
+    } catch (err) {
+      console.error('Failed to fetch notifications:', err);
+    }
+  }, []);
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      const res = await fetch('/api/notifications', { method: 'PATCH' });
+      if (res.ok) {
+        setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        setUnreadCount(0);
+      }
+    } catch (err) {
+      console.error('Failed to mark all as read:', err);
+    }
+  };
+
+  const handleNotificationClick = async (id: string) => {
+    try {
+      await fetch('/api/notifications', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      setNotifications(prev =>
+        prev.map(n => (n.id === id ? { ...n, isRead: true } : n))
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error('Failed to mark notification as read:', err);
+    }
+    setIsNotificationsOpen(false);
+  };
+
+  const formatTimeAgo = (dateStr: string) => {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - d.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffHrs = Math.floor(diffMin / 60);
+    const diffDays = Math.floor(diffHrs / 24);
+
+    if (diffMin < 1) return 'Just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    if (diffHrs < 24) return `${diffHrs}h ago`;
+    return `${diffDays}d ago`;
+  };
 
   useEffect(() => {
+    setMounted(true);
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 10000);
+
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsProfileOpen(false);
@@ -22,13 +95,13 @@ export default function Navbar() {
       if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
         setIsNotificationsOpen(false);
       }
-      if (helpRef.current && !helpRef.current.contains(event.target as Node)) {
-        setIsHelpOpen(false);
-      }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      clearInterval(interval);
+    };
+  }, [fetchNotifications]);
 
   return (
     <nav className="sticky top-0 z-50 flex justify-between items-center px-6 w-full bg-surface-container-lowest h-[56px] border-b border-outline-variant shadow-sm">
@@ -81,6 +154,17 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-3 relative">
         <div className="hidden sm:flex items-center gap-1">
+          {/* Theme Toggle */}
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-1 mr-1 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+          )}
+
           {/* Notifications Dropdown */}
           <div className="relative" ref={notificationsRef}>
             <button 
@@ -89,80 +173,59 @@ export default function Navbar() {
             >
               <Bell size={18} />
               {/* Notification Indicator Dot */}
-              <span className="absolute top-1 right-1.5 w-2 h-2 bg-error rounded-full border border-white"></span>
+              {unreadCount > 0 && (
+                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-error text-white rounded-full text-[9px] font-bold flex items-center justify-center border border-white">
+                  {unreadCount}
+                </span>
+              )}
             </button>
 
             {isNotificationsOpen && (
-              <div className="absolute right-0 mt-2 w-72 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute right-0 mt-2 w-80 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="px-4 py-2 border-b border-surface-container flex justify-between items-center">
                   <h3 className="text-sm font-semibold text-on-surface">Notifications</h3>
-                  <button className="text-xs text-primary hover:underline">Mark all as read</button>
+                  {unreadCount > 0 && (
+                    <button 
+                      onClick={handleMarkAllAsRead} 
+                      className="text-xs text-primary hover:underline"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
                 </div>
-                <div className="max-h-64 overflow-y-auto">
-                  <Link href="/tickets/TKT-001" onClick={() => setIsNotificationsOpen(false)} className="block px-4 py-3 hover:bg-surface-container transition-colors border-b border-surface-container/50">
-                    <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 mt-1.5 rounded-full bg-primary flex-shrink-0"></div>
-                      <div>
-                        <p className="text-sm text-on-surface leading-tight"><span className="font-semibold">Sarah Jenkins</span> replied to <span className="font-semibold text-primary">TKT-001</span></p>
-                        <p className="text-xs text-on-surface-variant mt-1">2 hours ago</p>
-                      </div>
+                <div className="max-h-64 overflow-y-auto custom-scrollbar">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center text-xs text-on-surface-variant">
+                      No notifications yet
                     </div>
-                  </Link>
-                  <Link href="/tickets/TKT-004" onClick={() => setIsNotificationsOpen(false)} className="block px-4 py-3 hover:bg-surface-container transition-colors border-b border-surface-container/50 bg-primary/5">
-                    <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 mt-1.5 rounded-full bg-error flex-shrink-0"></div>
-                      <div>
-                        <p className="text-sm text-on-surface leading-tight">New <span className="font-semibold text-error">URGENT</span> ticket <span className="font-semibold text-primary">TKT-004</span> created</p>
-                        <p className="text-xs text-on-surface-variant mt-1">5 hours ago</p>
-                      </div>
-                    </div>
-                  </Link>
-                  <div className="px-4 py-3 hover:bg-surface-container transition-colors opacity-70">
-                    <div className="flex items-start gap-3">
-                      <div className="w-2 h-2 mt-1.5 rounded-full bg-transparent border border-outline-variant flex-shrink-0"></div>
-                      <div>
-                        <p className="text-sm text-on-surface leading-tight">System maintenance scheduled for tonight at 2AM UTC.</p>
-                        <p className="text-xs text-on-surface-variant mt-1">1 day ago</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="px-4 pt-2 pb-1 text-center border-t border-surface-container">
-                  <Link href="#" className="text-xs font-semibold text-primary hover:underline">View all notifications</Link>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Help Dropdown */}
-          <div className="relative" ref={helpRef}>
-            <button 
-              onClick={() => setIsHelpOpen(!isHelpOpen)}
-              className="p-1 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95"
-            >
-              <HelpCircle size={18} />
-            </button>
-            
-            {isHelpOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                <div className="px-4 py-2 border-b border-surface-container">
-                  <h3 className="text-sm font-semibold text-on-surface">Help & Resources</h3>
-                </div>
-                <div className="py-1">
-                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-surface-container transition-colors">
-                    Documentation
-                  </button>
-                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-surface-container transition-colors">
-                    Keyboard Shortcuts
-                  </button>
-                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-on-surface hover:bg-surface-container transition-colors">
-                    Community Forum
-                  </button>
-                </div>
-                <div className="border-t border-surface-container py-1">
-                  <button onClick={() => setIsHelpOpen(false)} className="w-full text-left px-4 py-2 text-sm text-primary font-medium hover:bg-primary-container/30 transition-colors">
-                    Contact Support
-                  </button>
+                  ) : (
+                    notifications.map((n) => (
+                      <Link 
+                        key={n.id} 
+                        href={n.link || '#'} 
+                        onClick={() => handleNotificationClick(n.id)} 
+                        className={`block px-4 py-3 hover:bg-surface-container transition-colors border-b border-surface-container/50 ${
+                          !n.isRead ? 'bg-primary/5 font-medium' : 'opacity-70'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`w-2 h-2 mt-1.5 rounded-full flex-shrink-0 ${
+                            !n.isRead 
+                              ? n.type === 'TICKET_CREATED' || (n.type === 'PRIORITY_UPDATED' && n.message.includes('URGENT'))
+                                ? 'bg-error'
+                                : 'bg-primary'
+                              : 'bg-transparent'
+                          }`} />
+                          <div className="flex-grow">
+                            <p className="text-[13px] text-on-surface leading-tight">
+                              <span className="font-semibold">{n.title}</span> — {n.message}
+                            </p>
+                            <p className="text-[10px] text-on-surface-variant mt-1">{formatTimeAgo(n.createdAt)}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))
+                  )}
                 </div>
               </div>
             )}

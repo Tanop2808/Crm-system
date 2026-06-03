@@ -85,40 +85,48 @@ export default function CustomersPage() {
                   customers.map((customer) => (
                     <tr
                       key={customer.email}
-                      className="hover:bg-surface-container transition-colors group"
+                      className="hover:bg-surface-container transition-colors group cursor-pointer"
                     >
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm">
-                            {customer.name.charAt(0).toUpperCase()}
+                        <Link href={`/customers/${encodeURIComponent(customer.email)}`} className="block">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm">
+                              {customer.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-[14px] font-semibold text-on-surface group-hover:text-primary transition-colors">{customer.name}</span>
+                              <span className="text-[13px] text-on-surface-variant flex items-center gap-1 mt-0.5">
+                                <Mail size={12} /> {customer.email}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex flex-col">
-                            <span className="text-[14px] font-semibold text-on-surface">{customer.name}</span>
-                            <span className="text-[13px] text-on-surface-variant flex items-center gap-1 mt-0.5">
-                              <Mail size={12} /> {customer.email}
-                            </span>
-                          </div>
-                        </div>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-on-surface">
-                          <FolderOpen size={14} className="text-on-surface-variant" />
-                          {customer.totalTickets}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {customer.openTickets > 0 ? (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-semibold bg-error-container text-on-error-container">
-                            {customer.openTickets} Open
+                        <Link href={`/customers/${encodeURIComponent(customer.email)}`} className="block">
+                          <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-on-surface">
+                            <FolderOpen size={14} className="text-on-surface-variant" />
+                            {customer.totalTickets}
                           </span>
-                        ) : (
-                          <span className="text-[13px] text-on-surface-variant">All Clear</span>
-                        )}
+                        </Link>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <Link href={`/customers/${encodeURIComponent(customer.email)}`} className="block">
+                          {customer.openTickets > 0 ? (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-semibold bg-error-container text-on-error-container">
+                              {customer.openTickets} Open
+                            </span>
+                          ) : (
+                            <span className="text-[13px] text-on-surface-variant">All Clear</span>
+                          )}
+                        </Link>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <span className="text-[13px] text-on-surface-variant">
-                          {formatDate(customer.latestActivity)}
-                        </span>
+                        <Link href={`/customers/${encodeURIComponent(customer.email)}`} className="block">
+                          <span className="text-[13px] text-on-surface-variant">
+                            {formatDate(customer.latestActivity)}
+                          </span>
+                        </Link>
                       </td>
                     </tr>
                   ))

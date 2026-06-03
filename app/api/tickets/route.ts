@@ -71,10 +71,11 @@ export async function POST(request: Request) {
     const ticketId = `TKT-${String(count + 1).padStart(3, '0')}`;
 
     // Map priority string to enum
-    let ticketPriority = Priority.MEDIUM;
+    let ticketPriority: Priority = Priority.MEDIUM;
     if (priority && Object.values(Priority).includes(priority.toUpperCase() as Priority)) {
       ticketPriority = priority.toUpperCase() as Priority;
     }
+
 
     const newTicket = await prisma.ticket.create({
       data: {
@@ -87,6 +88,20 @@ export async function POST(request: Request) {
         status: Status.OPEN,
       },
     });
+
+    // Create a notification for new ticket
+    try {
+      await prisma.notification.create({
+        data: {
+          title: 'New Ticket Created',
+          message: `Ticket ${ticketId} has been submitted by ${customerName}.`,
+          type: 'TICKET_CREATED',
+          link: `/tickets/${ticketId}`,
+        },
+      });
+    } catch (notifError) {
+      console.error('Failed to create notification for new ticket:', notifError);
+    }
 
     return NextResponse.json(newTicket, { status: 201 });
   } catch (error) {
